@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/leakage"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Add Products" />
+
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/brandy"
+            android:title="Brandy" />
+        <item
+            android:id="@+id/gin"
+            android:title="Gin" />
+        <item
+            android:id="@+id/rum"
+            android:title="Rum" />
+        <item
+            android:id="@+id/vodka"
+            android:title="Vodka" />
+        <item
+            android:id="@+id/whiskey"
+            android:title="Whiskey" />
+    </group>
+</menu>
