@@ -10,5 +10,10 @@
     <string name="title_activity_whiskey">Whiskey</string>
     <string name="title_activity_rum">Rum</string>
     <string name="title_activity_gin">Gin</string>
+    <string name="title_activity_home">Home</string>
     <string name="title_activity_add">Add</string>
+    <array name="genres">
+        <item>Lavia Kasarani</item>
+        <item>Lavia Juja</item>
+    </array>
 </resources>

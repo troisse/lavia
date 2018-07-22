@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "140174909793",
+    "firebase_url": "https://lavia-6615f.firebaseio.com",
+    "project_id": "lavia-6615f",
+    "storage_bucket": "lavia-6615f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140174909793:android:c0d8f7e39a6a3389",
+        "android_client_info": {
+          "package_name": "com.example.home.lavia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140174909793-1cftlduvlvsp6otea2565n738e0bsq0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.home.lavia",
+            "certificate_hash": "15ead757caf7e0d7239ec2613586c0770ed518d9"
+          }
+        },
+        {
+          "client_id": "140174909793-ir5o3kvover68j94i7diibktnnnv8adc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIjV7yQFv6jGmEV747k-ghYTHJX3w3Z5Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140174909793-ir5o3kvover68j94i7diibktnnnv8adc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

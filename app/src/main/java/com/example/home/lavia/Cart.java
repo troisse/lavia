@@ -8,11 +8,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Cart extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    EditText username;
+    Button checkOut;
+    DatabaseReference databaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +32,15 @@ public class Cart extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        databaseUser = FirebaseDatabase.getInstance().getReference("Users");
+        username= (EditText)findViewById(R.id.username);
+        checkOut = (Button)findViewById(R.id.checkOut);
+        checkOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUser();
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -30,6 +50,19 @@ public class Cart extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void addUser() {
+        String name = username.getText().toString().trim();
+
+        if (!TextUtils.isEmpty(name)){
+            String id = databaseUser.push().getKey();
+            User user = new User(id, name);
+            databaseUser.child(id).setValue(user);
+        }else {
+            Toast.makeText(this,"Enter Username", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

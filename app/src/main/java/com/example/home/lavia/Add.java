@@ -1,48 +1,89 @@
 package com.example.home.lavia;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
 
 public class Add extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener,OnClickListener{
     ImageView imageView;
-    Integer REQUEST_CAMERA=1, SELECT_FILE=0;
+
+    // Root Database Name for Firebase Database.
+    EditText imageGroup;
+    EditText imageName;
+    EditText imagePrice;
+
+    // Creating StorageReference and DatabaseReference object.
+    StorageReference storageReference;
+    DatabaseReference databaseReference;
+
+    // Image request code for onActivityResult() .
+    ProgressBar progressBar;
+    ImageButton imageButton;
+    Button Upload;
+
+    Uri fileUri;
+    private static final int PICK_IMAGE_REQUEST = 234;
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setOnClickListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        storageReference = FirebaseStorage.getInstance().getReference("Images");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Liquor");
+
         imageView = (ImageView) findViewById(R.id.imageView);
+        imageGroup = (EditText) findViewById(R.id.liq_group);
+        imageName = (EditText)findViewById(R.id.liq_name);
+        imagePrice = (EditText) findViewById(R.id.liq_price);
+        imageButton = (ImageButton) findViewById(R.id.button_image);
+        Upload = (Button)findViewById(R.id.upload);
 
-
-
-
+        Upload.setOnClickListener((View.OnClickListener) Add.this);
+        imageButton.setOnClickListener((View.OnClickListener) Add.this);
+// Assigning Id to ProgressBar.
+        progressBar = new ProgressBar(Add.this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -51,140 +92,179 @@ public class Add extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
-
-
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select an Image"), PICK_IMAGE_REQUEST);
     }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data !=null && data.getData() != null){
+            fileUri = data.getData();
+            Picasso.get().load(fileUri).into(imageView);
+            //StorageReference filePath = storageReference.child("liquor").child(uri.getLastPathSegment());
         }
 
-        return super.onOptionsItemSelected(item);
     }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), Add.class);
-            startActivity(camshot);
-        }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
-            startActivity(camshot);
-        }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
-            startActivity(camshot);
-        }else if (id == R.id.home) {
-            Intent camshot = new Intent(getApplicationContext(), Home.class);
-            startActivity(camshot);
-        }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
-            startActivity(camshot);
-        }else if (id == R.id.cart) {
-            Intent camshot = new Intent(getApplicationContext(), Cart.class);
-            startActivity(camshot);
-        }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
-            startActivity(camshot);
-        }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
-            startActivity(camshot);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    private String getFileExtension(Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime =  MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
-
-
-
-        @Override
-        public void onClick(View v) {
-
-            SelectImage();
+    private void uploadFile(){
+        String Group = imageGroup.getText().toString().trim();
+        String Name = imageName.getText().toString().trim();
+        String Price = imagePrice.getText().toString().trim();
+        if (TextUtils.isEmpty(Group)){
+            Toast.makeText(Add.this, "Add liquor group", Toast.LENGTH_LONG).show();
+        }else if (TextUtils.isEmpty(Name)){
+            Toast.makeText(Add.this, "Add liquor name", Toast.LENGTH_LONG).show();
+        }else if (TextUtils.isEmpty(Price)){
+            Toast.makeText(Add.this, "Add liquor price", Toast.LENGTH_LONG).show();
+        }else {
+            String id = databaseReference.push().getKey();
+            ImageUploadInfo imageUploadInfo = new ImageUploadInfo(id, Group, Name, Price);
+            databaseReference.child(Group).child(Name).child("Price").setValue(Price);
+            //databaseReference.child().child("Brand").setValue(Name);
+           //databaseReference.child(Name).child("Price").setValue(Price);
+            Toast.makeText(Add.this, "Product Added", Toast.LENGTH_LONG).show();
+            Cleartxt();
         }
+        if (fileUri != null){
+            if (fileUri != null){
+                final StorageReference filePath = storageReference.child(System.currentTimeMillis()
+                        + "." + getFileExtension(fileUri));
+                filePath.putFile(fileUri);
+                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressBar.setProgress(0);
+                                    }
+                                }, 5000);
+                                Toast.makeText(Add.this, "Upload Successful", Toast.LENGTH_LONG).show();
+                                //ImageUploadInfo imageUploadInfo = new ImageUploadInfo();
+                                String uploadId = databaseReference.push().getKey();
+                                databaseReference.child(uploadId).setValue(uri);
+                            }
 
 
-
-    private void SelectImage(){
-
-        final CharSequence[] items={"Camera","Gallery", "Cancel"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(Add.this);
-        builder.setTitle("Add Image");
-
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (items[i].equals("Camera")) {
-
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-
-                } else if (items[i].equals("Gallery")) {
-
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, SELECT_FILE);
-
-                } else if (items[i].equals("Cancel")) {
-                    dialogInterface.dismiss();
-                }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Add.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+//                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                                progressBar.setProgress((int) progress);
+//                            }
+//                        })
+            }else {
+                Toast.makeText(this,"No Image Selected",Toast.LENGTH_SHORT).show();
             }
-        });
-        builder.show();
-
-    }
-    @Override
-    public  void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode,data);
-
-        if(resultCode== Activity.RESULT_OK){
-
-            if(requestCode==REQUEST_CAMERA){
-
-                Bundle bundle = data.getExtras();
-                final Bitmap bmp = (Bitmap) bundle.get("data");
-                imageView.setImageBitmap(bmp);
-
-            }else if(requestCode==SELECT_FILE){
-
-                Uri selectedImageUri = data.getData();
-                imageView.setImageURI(selectedImageUri);
-            }
-
         }
     }
+    private void Cleartxt(){
+        imageGroup.setText("");
+        imageName.setText("");
+        imagePrice.setText("");
+    }
+
+                      public void onClick(View view) {
+                        if (view == imageButton) {
+                            showFileChooser();
+
+                        } else if (view == Upload) {
+                            uploadFile();
+                        }
+                    }
+                    @Override
+                    public void onBackPressed() {
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        } else {
+                            super.onBackPressed();
+                        }
+                    }
+
+                    @Override
+                    public boolean onCreateOptionsMenu(Menu menu) {
+                        // Inflate the menu; this adds items to the action bar if it is present.
+                        getMenuInflater().inflate(R.menu.add, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onOptionsItemSelected(MenuItem item) {
+                        // Handle action bar item clicks here. The action bar will
+                        // automatically handle clicks on the Home/Up button, so long
+                        // as you specify a parent activity in AndroidManifest.xml.
+                        int id = item.getItemId();
+
+                        //noinspection SimplifiableIfStatement
+                        if (id == R.id.action_settings) {
+                            return true;
+                        }
+
+                        return super.onOptionsItemSelected(item);
+                    }
+
+                    @SuppressWarnings("StatementWithEmptyBody")
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        // Handle navigation view item clicks here.
+                        int id = item.getItemId();
+
+                        if (id == R.id.leakage) {
+                            Intent camshot = new Intent(getApplicationContext(), Add.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.whiskey) {
+                            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.vodka) {
+                            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.home) {
+                            Intent camshot = new Intent(getApplicationContext(), Home.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.brandy) {
+                            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.cart) {
+                            Intent camshot = new Intent(getApplicationContext(), Cart.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.rum) {
+                            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+                            startActivity(camshot);
+                        } else if (id == R.id.gin) {
+                            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+                            startActivity(camshot);
+                        }
+
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+                    }
 
 
 
-}
+
+
+    }
+
+
+
+
+
