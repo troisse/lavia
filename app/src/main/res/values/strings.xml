@@ -16,4 +16,7 @@
         <item>Lavia Kasarani</item>
         <item>Lavia Juja</item>
     </array>
+    <string name="title_activity_wine">Wine</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
 </resources>

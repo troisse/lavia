@@ -32,5 +32,8 @@
         <item
             android:id="@+id/whiskey"
             android:title="Whiskey" />
+        <item
+            android:id="@+id/wine"
+            android:title="Wine" />
     </group>
 </menu>

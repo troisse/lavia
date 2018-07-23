@@ -99,6 +99,9 @@ public class Whiskey extends AppCompatActivity
         }else if (id == R.id.brandy) {
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
+        }else if (id == R.id.wine) {
+            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            startActivity(camshot);
         }else if (id == R.id.rum) {
             Intent camshot = new Intent(getApplicationContext(), Rum.class);
             startActivity(camshot);

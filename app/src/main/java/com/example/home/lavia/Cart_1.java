@@ -2,33 +2,43 @@ package com.example.home.lavia;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-public class Gin extends AppCompatActivity
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class Cart_1 extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    EditText username;
+    Button checkOut;
+    DatabaseReference databaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gin);
+        setContentView(R.layout.activity_cart);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        databaseUser = FirebaseDatabase.getInstance().getReference("Users");
+        username = (EditText) findViewById(R.id.username);
+        checkOut = (Button) findViewById(R.id.checkOut);
+        checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                openCart();
+            public void onClick(View v) {
+                addUser();
             }
         });
 
@@ -41,9 +51,18 @@ public class Gin extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-    public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
-        startActivity(intent);
+
+    private void addUser() {
+        String name = username.getText().toString().trim();
+
+        if (!TextUtils.isEmpty(name)) {
+            String id = databaseUser.push().getKey();
+            User user = new User(id, name);
+            databaseUser.child(id).setValue(user);
+        } else {
+            Toast.makeText(this, "Enter Username", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -59,7 +78,7 @@ public class Gin extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.gin, menu);
+        getMenuInflater().inflate(R.menu.cart, menu);
         return true;
     }
 
@@ -85,31 +104,30 @@ public class Gin extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), Add.class);
+            Intent camshot = new Intent(getApplicationContext(), Add_1.class);
             startActivity(camshot);
-        }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+        } else if (id == R.id.whiskey) {
+            Intent camshot = new Intent(getApplicationContext(), Whiskey_1.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            Intent camshot = new Intent(getApplicationContext(), Wine_1.class);
             startActivity(camshot);
-        }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+        } else if (id == R.id.vodka) {
+            Intent camshot = new Intent(getApplicationContext(), Vodka_1.class);
             startActivity(camshot);
-        }else if (id == R.id.home) {
-            Intent camshot = new Intent(getApplicationContext(), Home.class);
+        } else if (id == R.id.home) {
+            Intent camshot = new Intent(getApplicationContext(), Home_1.class);
             startActivity(camshot);
-        }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
+        } else if (id == R.id.brandy) {
+            Intent camshot = new Intent(getApplicationContext(), Brandy_1.class);
             startActivity(camshot);
-        }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+        } else if (id == R.id.rum) {
+            Intent camshot = new Intent(getApplicationContext(), Rum_1.class);
             startActivity(camshot);
-        }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+        } else if (id == R.id.gin) {
+            Intent camshot = new Intent(getApplicationContext(), Gin_1.class);
             startActivity(camshot);
-        }
-
+            }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

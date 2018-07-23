@@ -3,9 +3,8 @@ package com.example.home.lavia;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,14 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class Gin extends AppCompatActivity
+public class Wine_1 extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gin);
+        setContentView(R.layout.activity_wine);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -28,7 +28,8 @@ public class Gin extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openCart();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
@@ -40,10 +41,6 @@ public class Gin extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-    public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
-        startActivity(intent);
     }
 
     @Override
@@ -59,7 +56,7 @@ public class Gin extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.gin, menu);
+        getMenuInflater().inflate(R.menu.wine, menu);
         return true;
     }
 
@@ -78,40 +75,41 @@ public class Gin extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), Add.class);
-            startActivity(camshot);
-        }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
-            startActivity(camshot);
-        }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
-            startActivity(camshot);
-        }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
-            startActivity(camshot);
-        }else if (id == R.id.home) {
-            Intent camshot = new Intent(getApplicationContext(), Home.class);
-            startActivity(camshot);
-        }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
-            startActivity(camshot);
-        }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
-            startActivity(camshot);
-        }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
-            startActivity(camshot);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+@Override
+public boolean onNavigationItemSelected(MenuItem item) {
+    // Handle navigation view item clicks here.
+    int id = item.getItemId();
+    if (id == R.id.leakage) {
+        Intent camshot = new Intent(getApplicationContext(), Add_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.whiskey) {
+        Intent camshot = new Intent(getApplicationContext(), Whiskey_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.vodka) {
+        Intent camshot = new Intent(getApplicationContext(), Vodka_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.home) {
+        Intent camshot = new Intent(getApplicationContext(), Home_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.brandy) {
+        Intent camshot = new Intent(getApplicationContext(), Brandy_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.rum) {
+        Intent camshot = new Intent(getApplicationContext(), Rum_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.wine) {
+        Intent camshot = new Intent(getApplicationContext(), Wine_1.class);
+        startActivity(camshot);
+    }else if (id == R.id.gin) {
+        Intent camshot = new Intent(getApplicationContext(), Gin_1.class);
+        startActivity(camshot);
     }
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    drawer.closeDrawer(GravityCompat.START);
+    return true;
 }
+}
+
+

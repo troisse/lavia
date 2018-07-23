@@ -93,6 +93,9 @@ public class Rum extends AppCompatActivity
         }else if (id == R.id.vodka) {
             Intent camshot = new Intent(getApplicationContext(), Vodka.class);
             startActivity(camshot);
+        }else if (id == R.id.wine) {
+            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            startActivity(camshot);
         }else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
             startActivity(camshot);

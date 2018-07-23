@@ -102,6 +102,9 @@ public class Home extends AppCompatActivity
         }else if (id == R.id.rum) {
             Intent camshot = new Intent(getApplicationContext(), Rum.class);
             startActivity(camshot);
+        }else if (id == R.id.wine) {
+            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            startActivity(camshot);
         }else if (id == R.id.gin) {
             Intent camshot = new Intent(getApplicationContext(), Gin.class);
             startActivity(camshot);

@@ -239,6 +239,9 @@ public class Add extends AppCompatActivity
                         } else if (id == R.id.home) {
                             Intent camshot = new Intent(getApplicationContext(), Home.class);
                             startActivity(camshot);
+                        }else if (id == R.id.wine) {
+                            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+                            startActivity(camshot);
                         } else if (id == R.id.brandy) {
                             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
                             startActivity(camshot);

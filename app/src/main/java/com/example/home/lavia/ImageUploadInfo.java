@@ -6,7 +6,7 @@ public class ImageUploadInfo {
     String imagePrice;
     String imageUrl;
 
-    public ImageUploadInfo(Add add){
+    public ImageUploadInfo(){
 
     }
     public ImageUploadInfo( String group, String name, String price, String imageURL) {
