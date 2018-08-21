@@ -1,9 +1,18 @@
 package com.example.home.lavia;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +22,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.server.converter.StringToIntConverter;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.Attributes;
 
 public class Brandy extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ListView listView;
+    ProgressBar progressBar;
+    private DatabaseReference db;
+    FirebaseHelper helper;
+    ArrayAdapter adapter;
+//    CustomAdapter adapter;
+
+    ImageUploadInfo imageUploadInfo;
+String ImageUploadInfo;
+   private ArrayList<String> liqs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +63,35 @@ public class Brandy extends AppCompatActivity
         setContentView(R.layout.activity_brandy);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        adapter = new ArrayAdapter<>(this,R.layout.liq_list, this.liqs);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        listView = (ListView) findViewById(R.id.listview);
+        //INITIALIZE FIREBASE DB
+        db = FirebaseDatabase.getInstance().getReference().child("Comfort/Liquor");
+        helper = new FirebaseHelper(db);
+        imageUploadInfo = new ImageUploadInfo();
+
+db.addValueEventListener(new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+     String string = String.valueOf(dataSnapshot.getValue(ImageUploadInfo.class));
+
+     liqs.add(string);
+   adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+});
+        //ADAPTER
+
+        listView.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +110,9 @@ public class Brandy extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+
+
     public void openCart() {
         Intent intent = new Intent(this, Cart.class);
         startActivity(intent);

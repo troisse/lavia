@@ -63,7 +63,7 @@ public class Add_1 extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         storageReference = FirebaseStorage.getInstance().getReference("Images");
-        databaseReference = FirebaseDatabase.getInstance().getReference("Liquor");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Kasarani");
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageGroup = (EditText) findViewById(R.id.liq_group);
@@ -108,9 +108,12 @@ public class Add_1 extends AppCompatActivity
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
     private void uploadFile(){
-        String Group = imageGroup.getText().toString().trim();
+        final ImageUploadInfo liq = new ImageUploadInfo();
+
+        final String Group = imageGroup.getText().toString().trim();
         String Name = imageName.getText().toString().trim();
         String Price = imagePrice.getText().toString().trim();
+
         if (TextUtils.isEmpty(Group)){
             Toast.makeText(Add_1.this, "Add liquor group", Toast.LENGTH_LONG).show();
         }else if (TextUtils.isEmpty(Name)){
@@ -119,11 +122,15 @@ public class Add_1 extends AppCompatActivity
             Toast.makeText(Add_1.this, "Add liquor price", Toast.LENGTH_LONG).show();
         }else {
             String id = databaseReference.push().getKey();
-            ImageUploadInfo imageUploadInfo = new ImageUploadInfo(id, Group, Name, Price);
-            databaseReference.child(Group).child(Name).child("Price").setValue(Price);
+
+            liq.setImageGroup(imageGroup.getText().toString().trim());
+            liq.setImageName(imageName.getText().toString().trim());
+            liq.setImagePrice(imagePrice.getText().toString().trim());
+            liq.setImageUrl(getFileExtension(fileUri));
+//            String filePath =fileUri.getLastPathSegment();
+            databaseReference.child("Liquor").child(Group).child(Name).child("Price").setValue(Price);
             //databaseReference.child().child("Brand").setValue(Name);
             //databaseReference.child(Name).child("Price").setValue(Price);
-            Toast.makeText(Add_1.this, "Product Added", Toast.LENGTH_LONG).show();
             Cleartxt();
         }
         if (fileUri != null){
@@ -166,6 +173,7 @@ public class Add_1 extends AppCompatActivity
                 Toast.makeText(this,"No Image Selected",Toast.LENGTH_SHORT).show();
             }
         }
+        imageView.setImageDrawable(null);
     }
     private void Cleartxt(){
         imageGroup.setText("");

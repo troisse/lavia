@@ -16,21 +16,15 @@ import android.view.MenuItem;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+String radioChosen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        radioChosen = getIntent().getStringExtra("radioChosen");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCart();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -41,10 +35,7 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-    public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
-        startActivity(intent);
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -97,7 +88,7 @@ public class Home extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), Home.class);
             startActivity(camshot);
         }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
+            Intent camshot = new Intent(getApplicationContext(), Branddy.class);
             startActivity(camshot);
         }else if (id == R.id.rum) {
             Intent camshot = new Intent(getApplicationContext(), Rum.class);

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,6 +44,8 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 
 public class Add extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnClickListener{
@@ -49,29 +55,36 @@ public class Add extends AppCompatActivity
     EditText imageGroup;
     EditText imageName;
     EditText imagePrice;
-
+    TextView textView;
     // Creating StorageReference and DatabaseReference object.
     StorageReference storageReference;
     DatabaseReference databaseReference;
-
+private StorageTask mUploadTask;
     // Image request code for onActivityResult() .
     ProgressBar progressBar;
     ImageButton imageButton;
     Button Upload;
-
+    String radioChosen;
     Uri fileUri;
+    RadioGroup radioGroup;
     private static final int PICK_IMAGE_REQUEST = 234;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-
+        radioChosen = getIntent().getStringExtra("radioChosen");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        TextView tv = (TextView)findViewById(R.id.tv);
+        Intent intent = getIntent();
+        radioChosen = intent.getStringExtra("radioChosen");
+        tv.setText(radioChosen);
+
 
         storageReference = FirebaseStorage.getInstance().getReference("Images");
-        databaseReference = FirebaseDatabase.getInstance().getReference("Liquor");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
 
         imageView = (ImageView) findViewById(R.id.imageView);
         imageGroup = (EditText) findViewById(R.id.liq_group);
@@ -80,8 +93,8 @@ public class Add extends AppCompatActivity
         imageButton = (ImageButton) findViewById(R.id.button_image);
         Upload = (Button)findViewById(R.id.upload);
 
-        Upload.setOnClickListener((View.OnClickListener) Add.this);
-        imageButton.setOnClickListener((View.OnClickListener) Add.this);
+        Upload.setOnClickListener((OnClickListener) Add.this);
+        imageButton.setOnClickListener((OnClickListener) Add.this);
 // Assigning Id to ProgressBar.
         progressBar = new ProgressBar(Add.this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -94,6 +107,11 @@ public class Add extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+//    private Object findViewById(String radioChosen) {
+//        int ra
+//    }
+
     private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -106,7 +124,8 @@ public class Add extends AppCompatActivity
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data !=null && data.getData() != null){
             fileUri = data.getData();
             Picasso.get().load(fileUri).into(imageView);
-            //StorageReference filePath = storageReference.child("liquor").child(uri.getLastPathSegment());
+
+//            StorageReference filePath = storageReference.child("liquor").child(fileUri.getLastPathSegment());
         }
 
     }
@@ -115,10 +134,18 @@ public class Add extends AppCompatActivity
         MimeTypeMap mime =  MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
+
     private void uploadFile(){
-        String Group = imageGroup.getText().toString().trim();
+        final ImageUploadInfo liq = new ImageUploadInfo();
+
+
+        final String Group = imageGroup.getText().toString().trim();
         String Name = imageName.getText().toString().trim();
         String Price = imagePrice.getText().toString().trim();
+        Long timing = System.currentTimeMillis();
+        String time = String.valueOf(timing);
+
+
         if (TextUtils.isEmpty(Group)){
             Toast.makeText(Add.this, "Add liquor group", Toast.LENGTH_LONG).show();
         }else if (TextUtils.isEmpty(Name)){
@@ -126,33 +153,31 @@ public class Add extends AppCompatActivity
         }else if (TextUtils.isEmpty(Price)){
             Toast.makeText(Add.this, "Add liquor price", Toast.LENGTH_LONG).show();
         }else {
+
             String id = databaseReference.push().getKey();
-            ImageUploadInfo imageUploadInfo = new ImageUploadInfo(id, Group, Name, Price);
-            databaseReference.child(Group).child(Name).child("Price").setValue(Price);
+
+
+            liq.setImageGroup(imageGroup.getText().toString().trim());
+            liq.setImageName(imageName.getText().toString().trim());
+            liq.setImagePrice(imagePrice.getText().toString().trim());
+            liq.setImageUrl(getFileExtension(fileUri));
+//            String filePath =fileUri.getLastPathSegment();
+            databaseReference.child("Liquor").child(Group).child(time+"/"+Name).child("Price").setValue(Price);
             //databaseReference.child().child("Brand").setValue(Name);
            //databaseReference.child(Name).child("Price").setValue(Price);
-            Toast.makeText(Add.this, "Product Added", Toast.LENGTH_LONG).show();
             Cleartxt();
         }
         if (fileUri != null){
             if (fileUri != null){
                 final StorageReference filePath = storageReference.child(System.currentTimeMillis()
                         + "." + getFileExtension(fileUri));
-                filePath.putFile(fileUri);
-                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                mUploadTask = filePath.putFile(fileUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
-                            public void onSuccess(Uri uri) {
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressBar.setProgress(0);
-                                    }
-                                }, 5000);
-                                Toast.makeText(Add.this, "Upload Successful", Toast.LENGTH_LONG).show();
-                                //ImageUploadInfo imageUploadInfo = new ImageUploadInfo();
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(Add.this, "Product Added", Toast.LENGTH_LONG).show();
                                 String uploadId = databaseReference.push().getKey();
-                                databaseReference.child(uploadId).setValue(uri);
+                                databaseReference.child("Liquor").child(Group).child("Images").child(uploadId).setValue(liq);
                             }
 
 
@@ -160,7 +185,7 @@ public class Add extends AppCompatActivity
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Add.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Add.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 //                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -174,6 +199,7 @@ public class Add extends AppCompatActivity
                 Toast.makeText(this,"No Image Selected",Toast.LENGTH_SHORT).show();
             }
         }
+        imageView.setImageDrawable(null);
     }
     private void Cleartxt(){
         imageGroup.setText("");
@@ -186,8 +212,12 @@ public class Add extends AppCompatActivity
                             showFileChooser();
 
                         } else if (view == Upload) {
+                            if (mUploadTask !=null &&mUploadTask.isInProgress()){
+                                Toast.makeText(Add.this,"Please Wait...",Toast.LENGTH_LONG). show();
+                            }else {
                             uploadFile();
                         }
+                    }
                     }
                     @Override
                     public void onBackPressed() {

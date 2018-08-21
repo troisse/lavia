@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/txt"
-        android:layout_width="wrap_content"
-        android:layout_height="108dp"
+        android:layout_width="377dp"
+        android:layout_height="102dp"
         android:layout_marginBottom="7dp"
         android:gravity="center"
         android:text="LAVIA LIQUOR"
         android:textColor="@color/colorPrimary"
-        android:textSize="80dp"
+        android:textSize="50dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,13 +26,14 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="194dp"
-        android:layout_height="203dp"
+        android:layout_height="219dp"
         android:layout_marginTop="16dp"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        app:srcCompat="@drawable/lavia_icon" />
 
     <EditText
         android:id="@+id/username"
@@ -53,7 +54,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="8dp"
-        android:text="Name"
+        android:text="Username"
         android:textColor="#000"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -76,7 +77,6 @@
             android:id="@+id/comfort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:onClick="checkButton"
             android:text="Comfort zone" />
 
@@ -89,18 +89,6 @@
 
     </RadioGroup>
 
-    <Button
-        android:id="@+id/starter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/ic_navigate"
-        android:onClick="lavia_start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="VectorDrawableCompat" />
 
     <TextView
         android:id="@+id/textView9"

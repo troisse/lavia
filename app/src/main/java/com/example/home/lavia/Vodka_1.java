@@ -41,7 +41,7 @@ public class Vodka_1 extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
     public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
+        Intent intent = new Intent(this, Cart_1.class);
         startActivity(intent);
     }
 

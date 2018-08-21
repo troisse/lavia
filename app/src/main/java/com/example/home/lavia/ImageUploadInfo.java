@@ -1,32 +1,30 @@
 package com.example.home.lavia;
 
+import android.content.Context;
+
+import java.util.List;
+
 public class ImageUploadInfo {
-    String imageGroup;
-    String imageName;
-    String imagePrice;
-    String imageUrl;
+    private String imageName;
+    private String imagePrice;
+    private String imageUrl;
+    private String imageGroup;
+    private String key;
 
-    public ImageUploadInfo(){
-
-    }
-    public ImageUploadInfo( String group, String name, String price, String imageURL) {
-        if (name.trim().equals("")){
-            name = "Enter liquor Brand";
-        }
-        imageGroup = group;
-        imageName = name;
-        imagePrice = price;
-        imageUrl = imageURL;
+    public ImageUploadInfo(String imageName, String imagePrice, String imageUrl, String imageGroup,String key) {
+        this.imageName = imageName;
+        this.imagePrice = imagePrice;
+        this.imageUrl = imageUrl;
+        this.imageGroup = imageGroup;
+        this.key = key;
     }
 
-    public String getImageGroup() {
-        return imageGroup;
+    public ImageUploadInfo() {
     }
 
     public void setImageGroup(String imageGroup) {
         this.imageGroup = imageGroup;
     }
-
     public String getImageName() {
         return imageName;
     }
@@ -49,5 +47,17 @@ public class ImageUploadInfo {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getImageGroup() {
+        return imageGroup;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }
