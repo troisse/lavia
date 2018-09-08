@@ -101,14 +101,18 @@
             android:label="@string/title_activity_add"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".add_Product"
+            android:label="@string/title_activity_add"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Cart_1"
             android:label="@string/title_activity_cart"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Branddy"
             android:label="@string/title_activity_brandy"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".outlet"></activity>
     </application>
 
 </manifest>
