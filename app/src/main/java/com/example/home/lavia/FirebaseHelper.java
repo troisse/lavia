@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class FirebaseHelper {
 
     private DatabaseReference db;
-    private ArrayList<CustomAdapter> liqs=new ArrayList<>();
+    private ArrayList<Custom2Adapter> liqs=new ArrayList<>();
 
     /*
  PASS DATABASE REFRENCE
@@ -57,13 +57,13 @@ public class FirebaseHelper {
 
         for (DataSnapshot ds : dataSnapshot.getChildren())
         {
-            CustomAdapter liq=ds.getValue(CustomAdapter.class);
+            Custom2Adapter liq=ds.getValue(Custom2Adapter.class);
             liqs.add(liq);
         }
     }
 
     //RETRIEVE
-    public ArrayList<CustomAdapter> retrieve()
+    public ArrayList<Custom2Adapter> retrieve()
     {
         db.addChildEventListener(new ChildEventListener() {
             @Override

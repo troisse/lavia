@@ -18,38 +18,38 @@ public class first_page extends AppCompatActivity {
 //    TextView text;
 //    Typeface tfc1;
 //    String str;
-    ViewFlipper v_flipper;
+//    ViewFlipper v_flipper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_page);
+    }
+//        int images[]= {R.drawable.grapey,R.drawable.delivery,R.drawable.lavia_icon};
 
-        int images[]= {R.drawable.grapey,R.drawable.delivery,R.drawable.lavia_icon};
-
-        v_flipper = findViewById(R.id.v_flipper);
+//        v_flipper = findViewById(R.id.v_flipper);
 //        radioGroup = findViewById(R.id.radioGroup);
 //        text = findViewById(R.id.txt);
 //
 //
 //        tfc1 = Typeface.createFromAsset(getAssets(), "fonts/frozen_ice.ttf");
 //        text.setTypeface(tfc1);
-        for (int image:images){
-            flipperImages(image);
-        }
+//        for (int image:images){
+//            flipperImages(image);
+//        }
 
-    }
-    public void flipperImages(int image){
-        ImageView imageView = new ImageView(this);
-        imageView.setBackgroundResource(image);
-
-        v_flipper.addView(imageView);
-        v_flipper.setFlipInterval(4000);
-        v_flipper.setAutoStart(true);
-        v_flipper.setInAnimation(this,android.R.anim.slide_in_left);
-        v_flipper.setOutAnimation(this,android.R.anim.slide_out_right);
-    }
+//    }
+//    public void flipperImages(int image){
+//        ImageView imageView = new ImageView(this);
+//        imageView.setBackgroundResource(image);
+//
+//        v_flipper.addView(imageView);
+//        v_flipper.setFlipInterval(4000);
+//        v_flipper.setAutoStart(true);
+//        v_flipper.setInAnimation(this,android.R.anim.slide_in_left);
+//        v_flipper.setOutAnimation(this,android.R.anim.slide_out_right);
+//    }
     public void outlet (View view){
-        Intent intent = new Intent(this, outlet.class);
+        Intent intent = new Intent(this, Home.class);
         startActivity(intent);
     }
 
@@ -100,4 +100,5 @@ public class first_page extends AppCompatActivity {
 
 
     }
+
 

@@ -2,9 +2,6 @@ package com.example.home.lavia;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -88,7 +85,7 @@ String radioChosen;
             Intent camshot = new Intent(getApplicationContext(), Home.class);
             startActivity(camshot);
         }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Branddy.class);
+            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
         }else if (id == R.id.rum) {
             Intent camshot = new Intent(getApplicationContext(), Rum.class);

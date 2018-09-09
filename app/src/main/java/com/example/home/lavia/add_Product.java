@@ -2,10 +2,13 @@ package com.example.home.lavia;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,11 +28,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.squareup.picasso.Picasso;
 
 public class add_Product extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     ImageView imageView;
@@ -36,6 +43,7 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
     ProgressDialog progress;
     ImageButton imageButton;
     Button Upload;
+    Uri fileUri;
     private static final int PICK_IMAGE_REQUEST = 234;
     private StorageTask mUploadTask;
     private DatabaseReference databaseReference;
@@ -53,7 +61,7 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
         imageButton = (ImageButton) findViewById(R.id.button_image);
         Upload = (Button)findViewById(R.id.upload);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Comfort/Liquor");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Nairobi/Comfort/Liquor");
 
         Upload.setOnClickListener(add_Product.this);
         imageButton.setOnClickListener(add_Product.this);
@@ -68,12 +76,28 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
         navigationView.setNavigationItemSelectedListener( add_Product.this);
     }
     private void showFileChooser() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//        Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select an Image"), PICK_IMAGE_REQUEST);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data !=null && data.getData() != null){
+            fileUri =data.getData();
+            Picasso.get().load(fileUri).into(imageView);
+            //StorageReference filePath = storageReference.child("liquor").child(uri.getLastPathSegment());
+        }
 
+    }
+    private String getFileExtension(Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime =  MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
     private void Cleartxt(){
         imageGroup.setText("");
         imageName.setText("");
@@ -147,7 +171,40 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
                 }
             });
 
+        if (fileUri != null){
+            if (fileUri != null){
+                final StorageReference filePath = storageReference.child(imageName
+                        + "." + getFileExtension(fileUri));
+                filePath.putFile(fileUri);
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Toast.makeText(add_Product.this, "Upload Successful", Toast.LENGTH_LONG).show();
+                        //ImageUploadInfo imageUploadInfo = new ImageUploadInfo();
+                        String uploadId = databaseReference.push().getKey();
+                        databaseReference.child(uploadId).setValue(uri);
+                    }
 
+
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(add_Product.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+//                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                                progressBar.setProgress((int) progress);
+//                            }
+//                        })
+            }else {
+                Toast.makeText(this,"No Image Selected",Toast.LENGTH_SHORT).show();
+            }
+        }
+        imageView.setImageDrawable(null);
 
     }
 
