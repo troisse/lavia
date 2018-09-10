@@ -49,7 +49,7 @@ public class first_page extends AppCompatActivity {
 //        v_flipper.setOutAnimation(this,android.R.anim.slide_out_right);
 //    }
     public void outlet (View view){
-        Intent intent = new Intent(this, Home.class);
+        Intent intent = new Intent(this, outlet.class);
         startActivity(intent);
     }
 

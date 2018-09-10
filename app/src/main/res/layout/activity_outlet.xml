@@ -6,12 +6,57 @@
     android:layout_height="match_parent"
     tools:context=".outlet">
 
-    <ListView
-        android:layout_width="349dp"
-        android:layout_height="476dp"
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="6dp"
+        android:text="Nairobi"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioOne"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:text="Comfort"
+            android:onClick="checkButton"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/radioTwo"
+            android:onClick="checkButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="outlet1" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/shopButton"
+        android:layout_width="62dp"
+        android:layout_height="61dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/ic_outlet"
+        android:onClick="shop"
+        android:scaleType="fitCenter"
+        android:text="SHOP"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -16,20 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:onClick="shop"
-        android:id="@+id/shopButton"
-        android:layout_width="69dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_weight="1"
-        android:drawableTop="@drawable/ic_outlet"
-        android:scaleType="fitCenter"
-        android:text="SHOP"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/areaName"
-        app:layout_constraintTop_toTopOf="@+id/cityName" />
+
 
     <TextView
         android:textAlignment="textEnd"
