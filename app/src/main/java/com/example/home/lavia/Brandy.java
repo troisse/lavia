@@ -29,7 +29,7 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
     Custom2Adapter adapter;
     ArrayList<ImageUploadInfo> users;
     ProgressDialog progress;
-
+    String selectedType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +37,7 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_brandy);
-
+        selectedType = getIntent().getStringExtra("store");
         list = findViewById(R.id.listview);
         users = new ArrayList();
         adapter = new Custom2Adapter(this,users);
@@ -55,7 +55,7 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener( Brandy.this);
 
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Nairobi/Comfort/Liquor/Brandy/");
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Nairobi/" +selectedType +"/Liquor/Brandy");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -122,7 +122,7 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         int id = item.getItemId();
 
         if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), Add.class);
+            Intent camshot = new Intent(getApplicationContext(), add_Product.class);
             startActivity(camshot);
         } else if (id == R.id.whiskey) {
             Intent camshot = new Intent(getApplicationContext(), Whiskey.class);

@@ -44,6 +44,7 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
     ImageButton imageButton;
     Button Upload;
     Uri fileUri;
+    String selectedType;
     private static final int PICK_IMAGE_REQUEST = 234;
     private StorageTask mUploadTask;
     private DatabaseReference databaseReference;
@@ -55,13 +56,14 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        selectedType = getIntent().getStringExtra("store");
         imageGroup = (EditText) findViewById(R.id.liq_group);
         imageName = (EditText)findViewById(R.id.liq_name);
         imagePrice = (EditText) findViewById(R.id.liq_price);
         imageButton = (ImageButton) findViewById(R.id.button_image);
         Upload = (Button)findViewById(R.id.upload);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Nairobi/Comfort/Liquor");
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Nairobi/" +selectedType +"/Liquor/");
 
         Upload.setOnClickListener(add_Product.this);
         imageButton.setOnClickListener(add_Product.this);

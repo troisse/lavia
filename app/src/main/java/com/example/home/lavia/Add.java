@@ -73,12 +73,12 @@ private StorageTask mUploadTask;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-        radioChosen = getIntent().getStringExtra("radioChosen");
+        radioChosen = getIntent().getStringExtra("selectedType");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView tv = (TextView)findViewById(R.id.tv);
         Intent intent = getIntent();
-        radioChosen = intent.getStringExtra("radioChosen");
+        radioChosen = intent.getStringExtra("selectedType");
         tv.setText(radioChosen);
 
 
@@ -108,7 +108,7 @@ private StorageTask mUploadTask;
 
     }
 
-//    private Object findViewById(String radioChosen) {
+//    private Object findViewById(String selectedType) {
 //        int ra
 //    }
 

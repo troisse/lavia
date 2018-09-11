@@ -17,9 +17,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/lavia_p"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/lavia_icon"
+
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -65,44 +65,8 @@
             android:label="@string/title_activity_wine"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Home_1"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Brandy_1"
-            android:label="@string/title_activity_brandy"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Vodka_1"
-            android:label="@string/title_activity_vodka"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Whiskey_1"
-            android:label="@string/title_activity_whiskey"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Wine_1"
-            android:label="@string/title_activity_wine"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Gin_1"
-            android:label="@string/title_activity_gin"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Rum_1"
-            android:label="@string/title_activity_rum"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Add_1"
-            android:label="@string/title_activity_add"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".add_Product"
             android:label="@string/title_activity_add"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Cart_1"
-            android:label="@string/title_activity_cart"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Brandy"
