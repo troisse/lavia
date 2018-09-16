@@ -19,7 +19,6 @@
         android:allowBackup="true"
         android:icon="@drawable/lavia_p"
         android:label="@string/app_name"
-
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -72,9 +71,10 @@
             android:name=".Brandy"
             android:label="@string/title_activity_brandy"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".outlet"
+        <activity
+            android:name=".outlet"
             android:label="@string/title_activity_outlet"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

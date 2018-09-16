@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.squareup.picasso.Picasso;
@@ -44,26 +46,28 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
     ImageButton imageButton;
     Button Upload;
     Uri fileUri;
-    String selectedType;
+    int store;
+    ImageUploadInfo selectedType= new ImageUploadInfo();
     private static final int PICK_IMAGE_REQUEST = 234;
     private StorageTask mUploadTask;
-    private DatabaseReference databaseReference;
+    private DatabaseReference ref;
     private StorageReference storageReference;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        selectedType = getIntent().getStringExtra("store");
+//        selectedType = getIntent().getStringExtra("store");
+
         imageGroup = (EditText) findViewById(R.id.liq_group);
         imageName = (EditText)findViewById(R.id.liq_name);
         imagePrice = (EditText) findViewById(R.id.liq_price);
+        imageView = (ImageView)findViewById(R.id.imageView);
         imageButton = (ImageButton) findViewById(R.id.button_image);
         Upload = (Button)findViewById(R.id.upload);
 
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Nairobi/" +selectedType +"/Liquor/");
+storageReference = FirebaseStorage.getInstance().getReference("Images/");
 
         Upload.setOnClickListener(add_Product.this);
         imageButton.setOnClickListener(add_Product.this);
@@ -91,15 +95,16 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data !=null && data.getData() != null){
             fileUri =data.getData();
             Picasso.get().load(fileUri).into(imageView);
+
             //StorageReference filePath = storageReference.child("liquor").child(uri.getLastPathSegment());
         }
 
     }
-    private String getFileExtension(Uri uri){
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime =  MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
+//    private String getFileExtension(Uri uri){
+//        ContentResolver cR = getContentResolver();
+//        MimeTypeMap mime =  MimeTypeMap.getSingleton();
+//        return mime.getExtensionFromMimeType(cR.getType(uri));
+//    }
     private void Cleartxt(){
         imageGroup.setText("");
         imageName.setText("");
@@ -121,11 +126,11 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
 
 
     public void save() {
-        String Group = imageGroup.getText().toString().trim();
-        String Name = imageName.getText().toString().trim();
+        final ImageUploadInfo liq = new ImageUploadInfo();
+        final String Group = imageGroup.getText().toString().trim();
+        final String Name = imageName.getText().toString().trim();
         String Price = imagePrice.getText().toString().trim();
-        progress = new ProgressDialog(this);
-        progress.setMessage("Posting your notice...");
+
 
         if (Name.isEmpty())
         {
@@ -143,27 +148,25 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
             return;
         }
         long time = System.currentTimeMillis();
-        long unique = System.currentTimeMillis();
-        String uniq = String.valueOf(unique);
 
+        liq.setImageGroup(imageGroup.getText().toString().trim());
+        liq.setImageName(imageName.getText().toString().trim());
+        liq.setImagePrice(imagePrice.getText().toString().trim());
+        Intent intent = getIntent();
+//        store.setText(intent.getStringExtra("store"));
+//        String store =intent.getStringExtra("store");
+//       selectedType.setSelectedType(intent.getStringExtra("store"));
+//        String outlet= getText(Integer.parseInt(intent.getStringExtra("store"))).toString().trim();
+//        liq.setSelectedType(store.getText().toString().trim());
+//        liq.setImageUrl(getFileExtension(fileUri));
 
-        DatabaseReference ref = databaseReference;
-        ref.child(Group);
-        ref.child(time + "/" + Name);
-        ref.child("Price");
-        ref.setValue(Price);
         SharedPreferences prefs =getSharedPreferences("db",MODE_PRIVATE);
-        String imei=prefs.getString("phone","");
-        ImageUploadInfo x = new ImageUploadInfo(Name,Group,Price,imei,uniq);
-        progress.show();
-
-
-
-
-            ref.setValue(x).addOnCompleteListener(new OnCompleteListener<Void>() {
+//        DatabaseReference ref = databaseReference;
+        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/");
+        ref.child(Group).child(time + "/" + Name).child("Price").setValue(Price)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    progress.dismiss();
                     if (task.isSuccessful()) {
                         Toast.makeText(add_Product.this, "Product Added Successfully", Toast.LENGTH_LONG).show();
                         Cleartxt();
@@ -175,16 +178,15 @@ public class add_Product extends AppCompatActivity implements View.OnClickListen
 
         if (fileUri != null){
             if (fileUri != null){
-                final StorageReference filePath = storageReference.child(imageName
-                        + "." + getFileExtension(fileUri));
+                final StorageReference filePath = storageReference.child(Name);
                 filePath.putFile(fileUri);
                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         Toast.makeText(add_Product.this, "Upload Successful", Toast.LENGTH_LONG).show();
                         //ImageUploadInfo imageUploadInfo = new ImageUploadInfo();
-                        String uploadId = databaseReference.push().getKey();
-                        databaseReference.child(uploadId).setValue(uri);
+                        String uploadId = ref.push().getKey();
+                        ref.child(Group).child(Name).child(uploadId).setValue(uri);
                     }
 
 

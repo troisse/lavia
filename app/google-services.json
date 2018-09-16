@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "140174909793-leorlqj0fulsnqt75hgljokagb25ea42.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.home.lavia",
+            "certificate_hash": "bd4195de723502968e0ed403089035fa70d57773"
+          }
+        },
+        {
           "client_id": "140174909793-ir5o3kvover68j94i7diibktnnnv8adc.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,22 +1,18 @@
 package com.example.home.lavia;
 
-import android.content.Context;
-
-import java.util.List;
-
 public class ImageUploadInfo {
     private String imageName;
     private String imagePrice;
     private String imageUrl;
     private String imageGroup;
-    private String key;
+    private String selectedType;
 
-    public ImageUploadInfo(String imageName, String imagePrice, String imageUrl, String imageGroup,String key) {
+    public ImageUploadInfo(String imageName, String imagePrice, String imageUrl, String imageGroup,String selectedType) {
         this.imageName = imageName;
         this.imagePrice = imagePrice;
         this.imageUrl = imageUrl;
         this.imageGroup = imageGroup;
-        this.key = key;
+this.selectedType = selectedType;
     }
 
     public ImageUploadInfo() {
@@ -53,11 +49,11 @@ public class ImageUploadInfo {
         return imageGroup;
     }
 
-    public String getKey() {
-        return key;
+    public String getSelectedType() {
+        return selectedType;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
     }
 }

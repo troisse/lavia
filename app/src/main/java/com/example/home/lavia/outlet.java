@@ -30,14 +30,19 @@ public class outlet extends AppCompatActivity {
                 }
             }
         });
+
     }
 public void checkButton (View v) {
     int radioId = radioGroup.getCheckedRadioButtonId();
+    ImageUploadInfo store = new ImageUploadInfo();
     radioButton = findViewById(radioId);
+    store.setSelectedType(radioButton.getText().toString());
+
 }
     public void shop(View view) {
         Intent intent= new Intent(this,Home.class);
         intent.putExtra("store",selectedType);
         startActivity(intent);
+
     }
 }
