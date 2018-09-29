@@ -104,7 +104,7 @@ public class Cart extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), Add.class);
+            Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
             Intent camshot = new Intent(getApplicationContext(), Whiskey.class);

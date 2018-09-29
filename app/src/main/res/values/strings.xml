@@ -19,10 +19,14 @@
     <string name="title_activity_wine">Wine</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="title_activity_outlet" />
-    <string name="title_activity_outlets">outlets</string>
+    <string name="title_activity_outlet"> Stores</string>
+
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Add Proucts</string>
+    <string name="tab_text_2">Sales</string>
     <string name="tab_text_3">Tab 3</string>
+    <string name="title_activity_sales">salesActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

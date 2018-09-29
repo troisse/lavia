@@ -122,7 +122,7 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         int id = item.getItemId();
 
         if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), add_Product.class);
+            Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         } else if (id == R.id.whiskey) {
             Intent camshot = new Intent(getApplicationContext(), Whiskey.class);

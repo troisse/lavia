@@ -64,7 +64,7 @@
             android:label="@string/title_activity_wine"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".add_Product"
+            android:name=".salesActivity"
             android:label="@string/title_activity_add"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
