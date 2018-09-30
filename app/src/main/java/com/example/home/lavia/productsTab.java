@@ -35,7 +35,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class productsTab extends Fragment implements View.OnClickListener {
 
-    ImageUploadInfo selectedType= new ImageUploadInfo();
     private static final int PICK_IMAGE_REQUEST = 234;
     private DatabaseReference ref;
     private StorageReference storageReference;
@@ -74,7 +73,7 @@ public class productsTab extends Fragment implements View.OnClickListener {
         imagePrice = (EditText) view.findViewById(R.id.liq_price);
         imageView = (ImageView) view.findViewById(R.id.imageView);
 
-        storageReference = FirebaseStorage.getInstance().getReference("Images/");
+        storageReference = FirebaseStorage.getInstance().getReference("Images/" );
 
     }
     public void onClick(View view) {
@@ -113,9 +112,9 @@ public class productsTab extends Fragment implements View.OnClickListener {
         }
         long time = System.currentTimeMillis();
 
-        liq.setImageGroup(imageGroup.getText().toString().trim());
-        liq.setImageName(imageName.getText().toString().trim());
-        liq.setImagePrice(imagePrice.getText().toString().trim());
+//        liq.setImageGroup(imageGroup.getText().toString().trim());
+//        liq.setImageName(imageName.getText().toString().trim());
+//        liq.setImagePrice(imagePrice.getText().toString().trim());
 //        Intent intent = getIntent();
 //        store.setText(intent.getStringExtra("store"));
 //        String store =intent.getStringExtra("store");
@@ -124,9 +123,11 @@ public class productsTab extends Fragment implements View.OnClickListener {
 //        liq.setSelectedType(store.getText().toString().trim());
 //        liq.setImageUrl(getFileExtension(fileUri));
 
-        SharedPreferences prefs = getActivity().getSharedPreferences("db",MODE_PRIVATE);
+//        SharedPreferences prefs = getActivity().getSharedPreferences("db",MODE_PRIVATE);
 //        DatabaseReference ref = databaseReference;
-        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/");
+//        outlet store= new outlet();
+        String Outlet = outlet.selectedIype.toLowerCase().trim();
+        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/").child(Outlet);
         ref.child(Group).child(time + "/" + Name).child("Price").setValue(Price)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -142,15 +143,15 @@ public class productsTab extends Fragment implements View.OnClickListener {
 
         if (fileUri != null){
             if (fileUri != null){
-                final StorageReference filePath = storageReference.child(Name);
+                final StorageReference filePath = storageReference.child(Group).child(Name);
                 filePath.putFile(fileUri);
                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         Toast.makeText(getActivity(), "Upload Successful", Toast.LENGTH_LONG).show();
                         //ImageUploadInfo imageUploadInfo = new ImageUploadInfo();
-                        String uploadId = ref.push().getKey();
-                        ref.child(Group).child(Name).child(uploadId).setValue(uri);
+//                        String uploadId = ref.push().getKey();
+//                        ref.child(Group).child(Name).child(uploadId).setValue(uri);
                     }
 
 

@@ -12,8 +12,9 @@ public class outlet extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton radioButton;
     private RadioButton radioOne;
-    private String selectedType="";
+//    private String selectedType="";
     private RadioButton radioTwo;
+    public static String selectedIype;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +28,9 @@ public class outlet extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if(i==R.id.radioOne){
-                    selectedType = radioOne.getText().toString();
+                    radioOne.getText().toString();
                 }else if(i==R.id.radioTwo){
-                    selectedType = radioTwo.getText().toString();
+                     radioTwo.getText().toString();
                 }
             }
         });
@@ -39,12 +40,13 @@ public void checkButton (View v) {
     int radioId = radioGroup.getCheckedRadioButtonId();
     ImageUploadInfo store = new ImageUploadInfo();
     radioButton = findViewById(radioId);
-    store.setSelectedType(radioButton.getText().toString());
+//    store.setSelectedType(radioButton.getText().toString());
+selectedIype = radioButton.getText().toString();
 
 }
     public void shop(View view) {
         Intent intent= new Intent(this,Home.class);
-        intent.putExtra("store",selectedType);
+//        intent.putExtra("store",selectedType);
         startActivity(intent);
 
     }
