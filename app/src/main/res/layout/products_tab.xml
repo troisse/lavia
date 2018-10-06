@@ -19,7 +19,6 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="90dp"
         android:cropToPadding="false"
-        android:src="@drawable/gucci"
         app:layout_constraintBottom_toTopOf="@+id/button_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/liq_group"

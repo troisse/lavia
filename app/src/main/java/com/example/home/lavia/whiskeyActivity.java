@@ -3,7 +3,6 @@ package com.example.home.lavia;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class Whiskey extends AppCompatActivity
+public class whiskeyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -42,7 +41,7 @@ public class Whiskey extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
     public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
+        Intent intent = new Intent(this, cartActivity.class);
         startActivity(intent);
     }
 
@@ -88,10 +87,10 @@ public class Whiskey extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
         }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
         }else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
@@ -100,13 +99,13 @@ public class Whiskey extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
         }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
             startActivity(camshot);
         }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
             startActivity(camshot);
         }
 

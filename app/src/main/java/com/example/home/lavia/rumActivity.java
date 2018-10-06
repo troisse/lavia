@@ -2,43 +2,32 @@ package com.example.home.lavia;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-public class Cart extends AppCompatActivity
+public class rumActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    EditText username;
-    Button checkOut;
-    DatabaseReference databaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+        setContentView(R.layout.activity_rum);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        databaseUser = FirebaseDatabase.getInstance().getReference("Users");
-        username= (EditText)findViewById(R.id.username);
-        checkOut = (Button)findViewById(R.id.checkOut);
-        checkOut.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                addUser();
+            public void onClick(View view) {
+                openCart();
             }
         });
 
@@ -51,18 +40,9 @@ public class Cart extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-
-    private void addUser() {
-        String name = username.getText().toString().trim();
-
-        if (!TextUtils.isEmpty(name)){
-            String id = databaseUser.push().getKey();
-            User user = new User(id, name);
-            databaseUser.child(id).setValue(user);
-        }else {
-            Toast.makeText(this,"Enter Username", Toast.LENGTH_LONG).show();
-        }
-
+    public void openCart() {
+        Intent intent = new Intent(this, cartActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -78,7 +58,7 @@ public class Cart extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.cart, menu);
+        getMenuInflater().inflate(R.menu.rum, menu);
         return true;
     }
 
@@ -107,13 +87,13 @@ public class Cart extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
-            startActivity(camshot);
-        }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
         }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
+            startActivity(camshot);
+        }else if (id == R.id.wine) {
+            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
         }else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
@@ -122,10 +102,10 @@ public class Cart extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
         }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
             startActivity(camshot);
         }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
             startActivity(camshot);
         }
 

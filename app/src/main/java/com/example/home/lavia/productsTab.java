@@ -2,7 +2,6 @@ package com.example.home.lavia;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -30,7 +28,6 @@ import com.google.firebase.storage.StorageTask;
 import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class productsTab extends Fragment implements View.OnClickListener {
@@ -126,8 +123,8 @@ public class productsTab extends Fragment implements View.OnClickListener {
 //        SharedPreferences prefs = getActivity().getSharedPreferences("db",MODE_PRIVATE);
 //        DatabaseReference ref = databaseReference;
 //        outlet store= new outlet();
-        String Outlet = outlet.selectedIype.toLowerCase().trim();
-        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/").child(Outlet);
+//        String Outlet = outletActivity.selectedIype.toLowerCase().trim();
+        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/");
         ref.child(Group).child(time + "/" + Name).child("Price").setValue(Price)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -173,7 +170,7 @@ public class productsTab extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(),"No Image Selected",Toast.LENGTH_SHORT).show();
             }
         }
-        imageView.setImageDrawable(null);
+//        imageView.setImageDrawable(null);
 
     }
     protected void showFileChooser() {
@@ -189,8 +186,11 @@ public class productsTab extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data !=null && data.getData() != null){
             fileUri =data.getData();
-            Picasso.get().load(fileUri).into(imageView);
-
+            if (fileUri!=null ) {
+                Picasso.get().load(fileUri).placeholder(R.drawable.gucci).into(imageView);
+            }else {
+                Picasso.get().load(R.drawable.gucci).into(imageView);
+            }
             //StorageReference filePath = storageReference.child("liquor").child(uri.getLastPathSegment());
         }
 

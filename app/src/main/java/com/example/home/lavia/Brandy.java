@@ -1,6 +1,7 @@
 package com.example.home.lavia;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,11 +28,12 @@ import java.util.Collections;
 
 public class Brandy extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    ListView list;
-    Custom2Adapter adapter;
-    ArrayList<ImageUploadInfo> users;
-    ProgressDialog progress;
-    String selectedType;
+    firebaseClient helper;
+    DatabaseReference db;
+    customAdapter adapter;
+    ListView lv;
+    EditText nameEditTxt,priceLiq;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +41,19 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_brandy);
-        selectedType = getIntent().getStringExtra("store");
-        list = findViewById(R.id.listview);
-        users = new ArrayList();
-        adapter = new Custom2Adapter(this,users);
-        list.setAdapter(adapter);
+        lv = (ListView) findViewById(R.id.listy);
 
-        progress = new ProgressDialog(this);
-        progress.setMessage("Loading Data...");
-        progress.show();
+        //ADAPTER
+
+        lv.setAdapter(adapter);
+
+
+        //INITIALIZE FIREBASE DB
+        db = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/").child("Brandy");
+
+        helper=new firebaseClient(db);
+        adapter=new customAdapter(this,helper.retrieve());
+//        helper.adapter=new customAdapter(this,R.layout.liq_list,data);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -55,32 +63,7 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener( Brandy.this);
 
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Nairobi/" +selectedType +"/Liquor/Brandy");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                users.clear();
-                for (DataSnapshot snap: dataSnapshot.getChildren()){
 
-                    final ImageUploadInfo liq = new ImageUploadInfo();
-                    /*ImageUploadInfo liq=snap.getValue(ImageUploadInfo.class);*/
-
-                    liq.setImageGroup(snap.getKey());
-                    users.add(liq);
-                }
-                progress.dismiss();
-                Collections.reverse(users);
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-        });
     }
 
     @Override
@@ -125,28 +108,28 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         } else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
         } else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
         } else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
         } else if (id == R.id.brandy) {
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
         } else if (id == R.id.cart) {
-            Intent camshot = new Intent(getApplicationContext(), Cart.class);
+            Intent camshot = new Intent(getApplicationContext(), cartActivity.class);
             startActivity(camshot);
         } else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
             startActivity(camshot);
         } else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
             startActivity(camshot);
         }
 

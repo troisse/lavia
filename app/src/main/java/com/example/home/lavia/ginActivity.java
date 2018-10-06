@@ -2,9 +2,7 @@ package com.example.home.lavia;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,54 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-public class Wine extends AppCompatActivity
+public class ginActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    ListView listView;
-    FirebaseDatabase database;
-    DatabaseReference ref;
-    ArrayList<ImageUploadInfo> list;
-    ArrayAdapter<ImageUploadInfo> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wine);
+        setContentView(R.layout.activity_gin);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        list = new ArrayList<>();
-        adapter = new ArrayAdapter<ImageUploadInfo>(this,R.layout.content_wine,R.id.listy, list);
-        database = FirebaseDatabase.getInstance();
-        ref = database.getReference("Comfort");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds:dataSnapshot.getChildren())
-                {
 
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                {
-
-                }
-
-            }
-        });
-        listView = (ListView)findViewById(R.id.listy);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +41,7 @@ public class Wine extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
     public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
+        Intent intent = new Intent(this, cartActivity.class);
         startActivity(intent);
     }
 
@@ -97,7 +58,7 @@ public class Wine extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.wine, menu);
+        getMenuInflater().inflate(R.menu.gin, menu);
         return true;
     }
 
@@ -116,7 +77,6 @@ public class Wine extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -127,10 +87,13 @@ public class Wine extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
+            startActivity(camshot);
+        }else if (id == R.id.wine) {
+            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
         }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
         }else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
@@ -138,14 +101,11 @@ public class Wine extends AppCompatActivity
         }else if (id == R.id.brandy) {
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
-        }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
-            startActivity(camshot);
         }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
             startActivity(camshot);
         }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
             startActivity(camshot);
         }
 

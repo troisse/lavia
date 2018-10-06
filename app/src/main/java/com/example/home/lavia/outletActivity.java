@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-public class outlet extends AppCompatActivity {
+public class outletActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     RadioButton radioButton;
     private RadioButton radioOne;

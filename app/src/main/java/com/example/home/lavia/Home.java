@@ -78,10 +78,10 @@ public class Home extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
         }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
         }else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
@@ -90,13 +90,13 @@ public class Home extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
         }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
         }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
             startActivity(camshot);
         }
 

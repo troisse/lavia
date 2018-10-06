@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".first_page"
+            android:name=".firstActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,31 +36,27 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Cart"
+            android:name=".cartActivity"
             android:label="@string/title_activity_cart"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Vodka"
+            android:name=".vodkaActivity"
             android:label="@string/title_activity_vodka"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Whiskey"
+            android:name=".whiskeyActivity"
             android:label="@string/title_activity_whiskey"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Rum"
+            android:name=".rumActivity"
             android:label="@string/title_activity_rum"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Gin"
+            android:name=".ginActivity"
             android:label="@string/title_activity_gin"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Add"
-            android:label="@string/title_activity_add"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Wine"
+            android:name=".wineActivity"
             android:label="@string/title_activity_wine"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -72,7 +68,7 @@
             android:label="@string/title_activity_brandy"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".outlet"
+            android:name=".outletActivity"
             android:label="@string/title_activity_outlet"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

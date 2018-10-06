@@ -3,7 +3,6 @@ package com.example.home.lavia;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,13 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class Rum extends AppCompatActivity
+public class vodkaActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rum);
+        setContentView(R.layout.activity_vodka);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,7 +41,7 @@ public class Rum extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
     public void openCart() {
-        Intent intent = new Intent(this, Cart.class);
+        Intent intent = new Intent(this, cartActivity.class);
         startActivity(intent);
     }
 
@@ -59,7 +58,7 @@ public class Rum extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.rum, menu);
+        getMenuInflater().inflate(R.menu.vodka, menu);
         return true;
     }
 
@@ -88,13 +87,13 @@ public class Rum extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), Whiskey.class);
+            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
         }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), Vodka.class);
+            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), Wine.class);
+            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
         }else if (id == R.id.home) {
             Intent camshot = new Intent(getApplicationContext(), Home.class);
@@ -103,10 +102,10 @@ public class Rum extends AppCompatActivity
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
             startActivity(camshot);
         }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), Rum.class);
+            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
             startActivity(camshot);
         }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), Gin.class);
+            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
             startActivity(camshot);
         }
 

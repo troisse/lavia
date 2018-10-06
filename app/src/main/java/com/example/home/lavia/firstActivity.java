@@ -1,18 +1,12 @@
 package com.example.home.lavia;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
 
-public class first_page extends AppCompatActivity {
+public class firstActivity extends AppCompatActivity {
 
 //    RadioButton radioButton;
 //    RadioGroup radioGroup;
@@ -52,7 +46,7 @@ public class first_page extends AppCompatActivity {
 //        v_flipper.setOutAnimation(this,android.R.anim.slide_out_right);
 //    }
     public void outlet (View view){
-        Intent intent = new Intent(this, outlet.class);
+        Intent intent = new Intent(this, outletActivity.class);
         startActivity(intent);
     }
 

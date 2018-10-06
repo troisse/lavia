@@ -32,8 +32,8 @@ public class Custom2Adapter extends BaseAdapter {
         return data.get(position);// get the actual item
     }
     @Override
-    public long getItemId(int id) {
-        return id;
+    public long getItemId(int position) {
+        return position;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
