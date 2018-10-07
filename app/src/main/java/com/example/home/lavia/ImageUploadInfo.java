@@ -1,6 +1,6 @@
 package com.example.home.lavia;
 
-public class ImageUploadInfo {
+public class ImageUploadInfo<data> {
     private String imageName;
     private String imagePrice;
     private String imageUrl;
@@ -17,6 +17,7 @@ this.selectedType = selectedType;
 
     public ImageUploadInfo() {
     }
+
 
     public void setImageGroup(String imageGroup) {
         this.imageGroup = imageGroup;

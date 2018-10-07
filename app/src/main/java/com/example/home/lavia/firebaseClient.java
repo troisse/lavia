@@ -10,20 +10,25 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 public class firebaseClient {
-    DatabaseReference db;
+    public DatabaseReference db;
     Boolean saved=null;
-    ArrayList<ImageUploadInfo> data=new ArrayList<>();
-    ArrayAdapter<customAdapter> adapter;
+    public ArrayList<ImageUploadInfo> data =new ArrayList<>();
+    public customAdapter adapter;
 
     public firebaseClient (DatabaseReference db) {
         this.db = db;
     }
-    private void fetchData(DataSnapshot dataSnapshot)
+    public void fetchData(DataSnapshot dataSnapshot)
     {
         data.clear();
 
         for (DataSnapshot ds : dataSnapshot.getChildren())
         {
+//            String  = dataSnapshot.child("Description").getValue(ImageUploadInfo.class);
+//            Long quantity = dataSnapshot.child("Quantity").getValue(Long.class);
+//            data.add(description+" ("+quantity+")");
+//            myArrayAdapter.notifyDataSetChanged();
+
             ImageUploadInfo spacecraft=ds.getValue(ImageUploadInfo.class);
             data.add(spacecraft);
             adapter.notifyDataSetChanged();

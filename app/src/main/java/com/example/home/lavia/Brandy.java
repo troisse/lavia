@@ -13,9 +13,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,10 +33,12 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
 
     firebaseClient helper;
     DatabaseReference db;
-    customAdapter adapter;
+    ArrayAdapter adapter;
+    ArrayList data = new ArrayList();
     ListView lv;
-    EditText nameEditTxt,priceLiq;
-
+//    EditText nameEditTxt,priceLiq;
+TextView nameLiq, priceLiq;
+    ImageView imageLiq;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +48,12 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         setContentView(R.layout.activity_brandy);
         lv = (ListView) findViewById(R.id.listy);
 
+            nameLiq = (TextView)findViewById(R.id.name_liq);
+            priceLiq = (TextView)findViewById(R.id.price_liq);
+            imageLiq = (ImageView)findViewById(R.id.image_liq);
         //ADAPTER
 
+        adapter= new ArrayAdapter(getApplicationContext(),R.layout.liq_list,data);
         lv.setAdapter(adapter);
 
 
@@ -52,8 +61,8 @@ public class Brandy extends AppCompatActivity implements NavigationView.OnNaviga
         db = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/").child("Brandy");
 
         helper=new firebaseClient(db);
-        adapter=new customAdapter(this,helper.retrieve());
-//        helper.adapter=new customAdapter(this,R.layout.liq_list,data);
+        customAdapter adapter=new customAdapter(this,helper.retrieve());
+//        adapter=new customAdapter(this,android.R.layout.list_content,helper.data);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
