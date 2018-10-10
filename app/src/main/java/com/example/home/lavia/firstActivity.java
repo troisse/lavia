@@ -85,11 +85,11 @@ public class firstActivity extends AppCompatActivity {
 
 
     }
-//
-//    public void outlet (View view){
-//        Intent intent = new Intent(this, outletActivity.class);
-//        startActivity(intent);
-//    }
+
+    public void outlet (View view){
+        Intent intent = new Intent(this, outletActivity.class);
+        startActivity(intent);
+    }
 
     }
 
