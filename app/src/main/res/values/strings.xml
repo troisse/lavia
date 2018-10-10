@@ -16,6 +16,9 @@
         <item>Lavia Kasarani</item>
         <item>Lavia Juja</item>
     </array>
+    <string name="minimum_password">Password too short, enter minimum 5 characters</string>
+    <string name="auth_failed">Lpg in failed, check your email and password or sign up</string>
+
     <string name="title_activity_wine">Wine</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>

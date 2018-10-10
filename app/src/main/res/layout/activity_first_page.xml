@@ -9,37 +9,42 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
+        android:id="@+id/toolbar1"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
     <TextView
         android:id="@+id/txt"
-        android:layout_width="377dp"
+        android:layout_width="295dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:gravity="center"
         android:text="LAVIA LIQUOR"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_flipper" />
+        app:layout_constraintEnd_toEndOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/v_flipper"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="385dp" />
 
     <ViewFlipper
         android:id="@+id/v_flipper"
-        android:layout_width="242dp"
-        android:layout_height="320dp"
+        android:layout_width="284dp"
+        android:layout_height="327dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="16dp"
         android:autoStart="true"
         android:flipInterval="3000"
@@ -49,13 +54,14 @@
         app:layout_constraintBottom_toTopOf="@+id/txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/lavia_icon">
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="345dp"
             app:srcCompat="@drawable/sld1"
             tools:ignore="ContentDescription" />
 
@@ -81,85 +87,75 @@
             tools:ignore="ContentDescription" />
     </ViewFlipper>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="291dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
-        android:text="Username"
-        android:textColor="#000"
-        android:textSize="10dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt" />
-
     <EditText
         android:id="@+id/username"
         android:layout_width="291dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="13dp"
+        android:layout_height="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:hint="Enter Username"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="291dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Password"
-        android:textColor="#000"
-        android:textSize="10dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/username"
-        app:layout_constraintStart_toStartOf="@+id/username"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="291dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="13dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:hint="Enter Password"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.071" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/username"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintVertical_bias="0.122"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="101dp"
         android:layout_height="18dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="140dp"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="48dp"
-        android:onClick="outlet"
-        android:text="Select Lavia Outlet"
-        android:textColor="#0053a6"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Wanna sip?Sign Up."
+        android:onClick="sign"
+        android:textColor="@color/colorPrimary"
         android:textSize="10dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="69dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:background="#8900f9"
+        android:onClick="outlet"
+        android:text="Log in"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -1,100 +1,95 @@
 package com.example.home.lavia;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class firstActivity extends AppCompatActivity {
+    private EditText inputName, inputPassword;
+    private Button btnSignIn, btnSignUp, btnResetPassword;
+    TextView txty;
+    private FirebaseAuth auth;
 
-//    RadioButton radioButton;
-//    RadioGroup radioGroup;
-//    TextView text;
-//    Typeface tfc1;
-//    String str;
-//    ViewFlipper v_flipper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        auth = FirebaseAuth.getInstance();
+        inputName = (EditText) findViewById(R.id.username);
+        btnSignIn = (Button) findViewById(R.id.button);
+        txty = (TextView) findViewById(R.id.textView9);
+        inputPassword = (EditText) findViewById(R.id.password);
+
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(firstActivity.this, outletActivity.class));
+            finish();
+        }
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name= inputName.getText().toString();
+                final String password = inputPassword.getText().toString();
+
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(getApplicationContext(), "Enter Username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(getApplicationContext(), "Enter password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                //authenticate user
+                Task<AuthResult> authResultTask = auth.signInWithEmailAndPassword(name, password)
+                        .addOnCompleteListener(firstActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                // If sign in fails, display a message to the user. If sign in succeeds
+                                // the auth state listener will be notified and logic to handle the
+                                // signed in user can be handled in the listener.
+
+                                if (!task.isSuccessful()) {
+                                    // there was an error
+                                    if (password.length() < 5) {
+                                        inputPassword.setError(getString(R.string.minimum_password));
+                                    } else {
+                                        Toast.makeText(firstActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    Intent intent = new Intent(firstActivity.this, outletActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
+            }
+        });
+
+
     }
-//        int images[]= {R.drawable.grapey,R.drawable.delivery,R.drawable.lavia_icon};
-
-//        v_flipper = findViewById(R.id.v_flipper);
-//        radioGroup = findViewById(R.id.radioGroup);
-//        text = findViewById(R.id.txt);
 //
-//
-//        tfc1 = Typeface.createFromAsset(getAssets(), "fonts/frozen_ice.ttf");
-//        text.setTypeface(tfc1);
-//        for (int image:images){
-//            flipperImages(image);
-//        }
-
+//    public void outlet (View view){
+//        Intent intent = new Intent(this, outletActivity.class);
+//        startActivity(intent);
 //    }
-//    public void flipperImages(int image){
-//        ImageView imageView = new ImageView(this);
-//        imageView.setBackgroundResource(image);
-//
-//        v_flipper.addView(imageView);
-//        v_flipper.setFlipInterval(4000);
-//        v_flipper.setAutoStart(true);
-//        v_flipper.setInAnimation(this,android.R.anim.slide_in_left);
-//        v_flipper.setOutAnimation(this,android.R.anim.slide_out_right);
-//    }
-    public void outlet (View view){
-        Intent intent = new Intent(this, outletActivity.class);
-        startActivity(intent);
-    }
-
-//    ConnectivityManager cm =
-//            (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-//
-//    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-//    boolean isConnected = activeNetwork != null &&
-//            activeNetwork.isConnectedOrConnecting();
-
-
-//
-//    public void checkButton(View view) {
-//        // Is the button now checked?
-//        boolean checked = ((RadioButton) view).isChecked();
-//        // Check which radio button was clicked
-//        switch (view.getId()) {
-//            case R.id.comfort:
-//                if (checked) str = "button1Text";
-////                if (!isConnected){
-////                    Toast.makeText(this, "Kindly Check your internet Connectivity", Toast.LENGTH_LONG).show();
-////                }
-//
-////                else{
-//                Intent intent = new Intent(this, Home.class);
-//                startActivity(intent);
-//                break;
-//
-//
-//
-//
-//            case R.id.kasa:
-//                if (checked) str = "button2Text";
-////                if (!isConnected){
-////                    Toast.makeText(this, "Kindly Check your internet Connectivity", Toast.LENGTH_LONG).show();
-////                }
-//
-////                else{
-//                    Intent intenty = new Intent(this, Home_1.class);
-//                    startActivity(intenty);
-//
-//
-//                break;
-//
-//        }
-//    }
-//
-
 
     }
 
