@@ -40,7 +40,7 @@ public class productsTab extends Fragment implements View.OnClickListener {
     Button imageButton;
     Button Upload;
     ImageView imageView;
-    EditText imageName, imagePrice, imageGroup;
+    EditText liqName, liqPrice, liqGroup;
     Uri fileUri;
 
     @Override
@@ -65,9 +65,9 @@ public class productsTab extends Fragment implements View.OnClickListener {
         imageButton.setOnClickListener(productsTab.this);
 //        textView.setText("Fragment " + (position + 1));
 
-        imageGroup = (EditText) view.findViewById(R.id.liq_group);
-        imageName = (EditText)view.findViewById(R.id.liq_name);
-        imagePrice = (EditText) view.findViewById(R.id.liq_price);
+        liqGroup = (EditText) view.findViewById(R.id.liq_group);
+        liqName = (EditText)view.findViewById(R.id.liq_name);
+        liqPrice = (EditText) view.findViewById(R.id.liq_price);
         imageView = (ImageView) view.findViewById(R.id.imageView);
 
         storageReference = FirebaseStorage.getInstance().getReference("Images/" );
@@ -86,32 +86,31 @@ public class productsTab extends Fragment implements View.OnClickListener {
         }
     }
     public void save() {
-        final ImageUploadInfo liq = new ImageUploadInfo();
-        final String Group = imageGroup.getText().toString().trim();
-        final String Name = imageName.getText().toString().trim();
-        String Price = imagePrice.getText().toString().trim();
+//        liq.setLiqGroup(liqGroup.getText().toString());
+
+      final String Group = liqGroup.getText().toString().trim();
+        final String Name = liqName.getText().toString().trim();
+        final String Price = liqPrice.getText().toString().trim();
 
 
         if (Name.isEmpty())
         {
-            imageName.setError("Kindly Fill This Input");
+            liqName.setError("Kindly Fill This Field");
             return;
         }else if (Group.isEmpty())
         {
-            imageGroup.setError("Kindly Fill This Input");
-            Toast.makeText(getActivity(), "Fill All Inputs", Toast.LENGTH_LONG).show();
+            liqGroup.setError("Kindly Fill This Field");
             return;
         }else if (Price.isEmpty())
         {
-            imagePrice.setError("Kindly Fill This Input");
-            Toast.makeText(getActivity(), "Fill All Inputs", Toast.LENGTH_LONG).show();
+            liqPrice.setError("Kindly Fill This Field");
             return;
         }
         long time = System.currentTimeMillis();
 
-//        liq.setImageGroup(imageGroup.getText().toString().trim());
-//        liq.setImageName(imageName.getText().toString().trim());
-//        liq.setImagePrice(imagePrice.getText().toString().trim());
+//        liq.setLiqGroup(liqGroup.getText().toString().trim());
+//        liq.setLiqName(liqName.getText().toString().trim());
+//        liq.setLiqPrice(liqPrice.getText().toString().trim());
 //        Intent intent = getIntent();
 //        store.setText(intent.getStringExtra("store"));
 //        String store =intent.getStringExtra("store");
@@ -124,31 +123,36 @@ public class productsTab extends Fragment implements View.OnClickListener {
 //        DatabaseReference ref = databaseReference;
 //        outlet store= new outlet();
 //        String Outlet = outletActivity.selectedIype.toLowerCase().trim();
-        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/");
-        ref.child(Group).child(time + "/" + Name).child("Price").setValue(Price)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Product Added Successfully", Toast.LENGTH_LONG).show();
-                            Cleartxt();
-                        } else {
-                            Toast.makeText(getActivity(), "Failed. Try Again", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
 
         if (fileUri != null){
-            if (fileUri != null){
-                final StorageReference filePath = storageReference.child(Group).child(Name);
+                final StorageReference filePath = storageReference;
                 filePath.putFile(fileUri);
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Toast.makeText(getActivity(), "Upload Successful", Toast.LENGTH_LONG).show();
-                        //ImageUploadInfo imageUploadInfo = new ImageUploadInfo();
+                         Toast.makeText(getActivity(), "Upload Successful", Toast.LENGTH_LONG).show();
+                        //UploadInfo imageUploadInfo = new UploadInfo();
 //                        String uploadId = ref.push().getKey();
-//                        ref.child(Group).child(Name).child(uploadId).setValue(uri);
+//                        ref.child(Group).child(Name).setValue(uri);
+                        final UploadInfo liq = new UploadInfo();
+                        liq.setLiqName(liqName.getText().toString());
+                        liq.setLiqPrice(liqPrice.getText().toString());
+                        liq.setImageUrl(uri.toString());
+
+                        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/");
+                        ref.child(Group).setValue(liq)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Product Added Successfully", Toast.LENGTH_LONG).show();
+                                            Cleartxt();
+                                        } else {
+                                            Toast.makeText(getActivity(), "Failed. Try Again", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
                     }
 
 
@@ -156,7 +160,7 @@ public class productsTab extends Fragment implements View.OnClickListener {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Capture Image", Toast.LENGTH_SHORT).show();
                             }
                         });
 //                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -172,7 +176,7 @@ public class productsTab extends Fragment implements View.OnClickListener {
         }
 //        imageView.setImageDrawable(null);
 
-    }
+
     protected void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -196,9 +200,9 @@ public class productsTab extends Fragment implements View.OnClickListener {
 
     }
     private void Cleartxt(){
-        imageGroup.setText("");
-        imageName.setText("");
-        imagePrice.setText("");
+        liqGroup.setText("");
+        liqName.setText("");
+        liqPrice.setText("");
     }
 
 }

@@ -38,7 +38,7 @@ public class outletActivity extends AppCompatActivity {
     }
 public void checkButton (View v) {
     int radioId = radioGroup.getCheckedRadioButtonId();
-    ImageUploadInfo store = new ImageUploadInfo();
+    UploadInfo store = new UploadInfo();
     radioButton = findViewById(radioId);
 //    store.setSelectedType(radioButton.getText().toString());
 selectedIype = radioButton.getText().toString();

@@ -29,8 +29,8 @@ public class wineActivity extends AppCompatActivity
     ListView listView;
     FirebaseDatabase database;
     DatabaseReference ref;
-    ArrayList<ImageUploadInfo> list;
-    ArrayAdapter<ImageUploadInfo> adapter;
+    ArrayList<UploadInfo> list;
+    ArrayAdapter<UploadInfo> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +38,7 @@ public class wineActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         list = new ArrayList<>();
-        adapter = new ArrayAdapter<ImageUploadInfo>(this,R.layout.content_wine,R.id.listy, list);
+        adapter = new ArrayAdapter<UploadInfo>(this,R.layout.content_wine,R.id.listy, list);
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Comfort");
         ref.addValueEventListener(new ValueEventListener() {

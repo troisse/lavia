@@ -33,7 +33,7 @@ public class cartActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         databaseUser = FirebaseDatabase.getInstance().getReference("Users");
-        username= (EditText)findViewById(R.id.username);
+        username= (EditText)findViewById(R.id.email);
         checkOut = (Button)findViewById(R.id.checkOut);
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +57,8 @@ public class cartActivity extends AppCompatActivity
 
         if (!TextUtils.isEmpty(name)){
             String id = databaseUser.push().getKey();
-            User user = new User(id, name);
-            databaseUser.child(id).setValue(user);
+//            User user = new User(id, name);
+//            databaseUser.child(id).setValue(user);
         }else {
             Toast.makeText(this,"Enter Username", Toast.LENGTH_LONG).show();
         }

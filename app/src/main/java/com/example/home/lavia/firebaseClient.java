@@ -1,7 +1,5 @@
 package com.example.home.lavia;
 
-import android.widget.ArrayAdapter;
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,9 +10,12 @@ import java.util.ArrayList;
 public class firebaseClient {
     public DatabaseReference db;
     Boolean saved=null;
-    public ArrayList<ImageUploadInfo> data =new ArrayList<>();
-    public customAdapter adapter;
+    public ArrayList<liquor> data =new ArrayList<>();
+    customAdapter adapter;
 
+    public firebaseClient () {
+
+    }
     public firebaseClient (DatabaseReference db) {
         this.db = db;
     }
@@ -24,19 +25,20 @@ public class firebaseClient {
 
         for (DataSnapshot ds : dataSnapshot.getChildren())
         {
-//            String  = dataSnapshot.child("Description").getValue(ImageUploadInfo.class);
+//            String  = dataSnapshot.child("Description").getValue(UploadInfo.class);
 //            Long quantity = dataSnapshot.child("Quantity").getValue(Long.class);
 //            data.add(description+" ("+quantity+")");
 //            myArrayAdapter.notifyDataSetChanged();
 
-            ImageUploadInfo spacecraft=ds.getValue(ImageUploadInfo.class);
+            liquor spacecraft=ds.getValue(liquor.class);
             data.add(spacecraft);
             adapter.notifyDataSetChanged();
         }
 
     }
+
     //READ BY HOOKING ONTO DATABASE OPERATION CALLBACKS
-    public ArrayList<ImageUploadInfo> retrieve() {
+    public ArrayList<liquor> retrieve() {
         db.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

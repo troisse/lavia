@@ -1,35 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#feffff"
+    app:cardCornerRadius="20dp"
+    app:contentPadding="5dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="107dp"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/image_liq"
-        android:layout_width="108dp"
-        android:layout_height="90dp"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/gucci"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/name_liq"
-         />
+        <LinearLayout
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <TextView
-        android:textColor="#000058"
-        android:id="@+id/name_liq"
-        android:layout_width="170dp"
-        android:layout_height="90dp"
-        android:layout_weight="1"
-        app:layout_constraintEnd_toStartOf="@id/price_liq" />
+            <ImageView
+                android:id="@+id/image_liq"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toStartOf="@id/name_liq"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/gucci" />
+        </LinearLayout>
 
-    <TextView
-        android:textColor="#000058"
-        android:id="@+id/price_liq"
-        android:layout_width="100dp"
-        android:layout_height="90dp"
-        android:layout_weight="1"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/name_liq"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#000058"
+
+                app:layout_constraintEnd_toStartOf="@id/price_liq" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/price_liq"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="#000058"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
