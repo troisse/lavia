@@ -8,22 +8,11 @@ import android.widget.TextView;
 
 public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    public ImageView imageUrl;
-    public TextView nameLiq, priceLiq;
-     ViewDataBinding binding;
-
-    public ViewHolder(ViewDataBinding binding) {
-        super(binding.getRoot());
-        this.binding = binding;
-    }
-
-    public void bind(Object data) {
-        binding.setVariable(BR.data, data);
-        binding.executePendingBindings();
-    }
+    ImageView imageLiq;
+    TextView nameLiq, priceLiq;
 
     private void findView(View view){
-        imageUrl = view.findViewById(R.id.image_liq);
+        imageLiq = view.findViewById(R.id.image_liq);
         nameLiq = view.findViewById(R.id.name_liq);
         priceLiq = view.findViewById(R.id.price_liq);
     }
@@ -31,7 +20,7 @@ public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClick
         super(view);
         findView(view);
 
-        view.setOnClickListener(this);
+//        view.setOnClickListener(this);
     }
 
     @Override

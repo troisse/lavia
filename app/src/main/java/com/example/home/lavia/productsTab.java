@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,12 +43,14 @@ public class productsTab extends Fragment implements View.OnClickListener {
     ImageView imageView;
     EditText liqName, liqPrice, liqGroup;
     Uri fileUri;
+    String store;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt("pos");
-
+//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
@@ -65,6 +68,7 @@ public class productsTab extends Fragment implements View.OnClickListener {
         imageButton.setOnClickListener(productsTab.this);
 //        textView.setText("Fragment " + (position + 1));
 
+//        Intent= getActivity().getIntent().getStringExtra()
         liqGroup = (EditText) view.findViewById(R.id.liq_group);
         liqName = (EditText)view.findViewById(R.id.liq_name);
         liqPrice = (EditText) view.findViewById(R.id.liq_price);
@@ -139,7 +143,9 @@ public class productsTab extends Fragment implements View.OnClickListener {
                         liq.setLiqPrice(liqPrice.getText().toString());
                         liq.setImageUrl(uri.toString());
 
-                        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/");
+                        store = new Home().getIntent().getStringExtra("store").toUpperCase().trim();
+                        
+                        ref = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child(store).child("Liquor/");
                         ref.child(Group).setValue(liq)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

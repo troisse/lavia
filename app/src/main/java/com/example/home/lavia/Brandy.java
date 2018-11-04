@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -30,58 +32,35 @@ import java.util.ArrayList;
 
 public class Brandy extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-//    FirebaseDatabase firebaseDatabase;
-    DatabaseReference db;
+    String store;
+ static DatabaseReference db;
 ArrayList<liquor>data;
-
-//customAdapter adapter;
-//    ListView lv;
-//    EditText nameEditTxt,priceLiq;
-//TextView nameLiq, priceLiq;
-//    ImageView imageLiq;
-//    LinearLayoutManager mLayoutManager; //for sorting
-    SharedPreferences mSharedPref; //for saving sort settings
-    RecyclerView mRecyclerView;
+//ProgressBar progressBar;
+RecyclerView mRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_view_group22);
-//        FirebaseRecyclerAdapter firebaseRecycler;
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setContentView(R.layout.activity_brandy);
-//        ListView lv = findViewById(R.id.listy);
+//progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        store= getIntent().getStringExtra("store").trim().toUpperCase();
+//        store.getText().toString();
 
-        //        Firebase.setAndroidContext(this);
-        db = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child("Liquor/").child("Brandy");
-//        db.keepSynced(true);
-//        nameLiq = (TextView) findViewById(R.id.name_liq);
-//        priceLiq = (TextView) findViewById(R.id.price_liq);
-//        imageLiq = (ImageView) findViewById(R.id.image_liq);
-//        //ADAPTER
-//
-//        adapter = new ArrayAdapter(Brandy.this,R.layout.liq_list,data);
-        mRecyclerView =(RecyclerView) findViewById(R.id.recyclerView);
+        db = FirebaseDatabase.getInstance().getReference().child("Nairobi/").child(store).child("Liquor/").child("Brandy");
+
+        Toast.makeText(this,store,Toast.LENGTH_LONG).show();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-
         final LinearLayoutManager layoutManager = new LinearLayoutManager(Brandy.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-//        mRecyclerView.setAdapter();
-
         layoutManager.setReverseLayout(false);
         layoutManager.setStackFromEnd(false);
-        //RecyclerView
 
-
-//        customAdapter adapter=new customAdapter(this,data);
-
-//        customAdapter adapter = new customAdapter(Brandy.this,data);
-//        mRecyclerView.setAdapter(adapter);
-
-//        customAdapter adapter=new customAdapter(this,helper.retrieve());
-//        adapter=new customAdapter(this,android.R.layout.list_content,helper.data);
+        firebaseClient helper = new firebaseClient(this, db, mRecyclerView);
+        helper.refreshData();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -90,69 +69,7 @@ ArrayList<liquor>data;
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(Brandy.this);
-
-//        db.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                String value = dataSnapshot.getValue(String.class);
-//
-//                //                Log.d(TAG, "Value is: " + value);
-//
-//            }
-
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        customAdapter adapter = new customAdapter(Brandy.this,data);
-//        mRecyclerView.setAdapter(adapter);
-//
-//    @Override
-//    public void onStart() {
-//            super.onStart();
-            FirebaseRecyclerAdapter<liquor, ViewHolder> adapter =
-                    new FirebaseRecyclerAdapter<liquor, ViewHolder>(
-                            liquor.class,
-                            R.layout.liq_list,
-                            ViewHolder.class,
-                            db
-                    ) {
-                        @Override
-                        protected void populateViewHolder(final ViewHolder viewHolder, liquor liq, int position) {
-                            db.addValueEventListener(new ValueEventListener() {
-
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                        liquor detail = postSnapshot.getValue(liquor.class);
-
-                                        String liqName = detail.getLiqName();
-                                        String liqPrice = detail.getLiqPrice();
-                                        String imageUrl = detail.getImageUrl();
-
-                                        viewHolder.nameLiq.setText(liqName);
-                                        viewHolder.priceLiq.setText(liqPrice);
-                                        Picasso.get().load(imageUrl).into(viewHolder.imageUrl);
-
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                    // [START_EXCLUDE]
-                                    System.out.println("The read failed: " + databaseError.getMessage());
-                                }
-                            });
-                        }
-
-                    };
-//     lv.setAdapter((ListAdapter) new customAdapter(this,mRecyclerView));
-        mRecyclerView.setAdapter(adapter);
-        }
+    }
 
     @Override
     public void onBackPressed() {

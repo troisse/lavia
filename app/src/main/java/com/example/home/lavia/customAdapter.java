@@ -2,36 +2,38 @@ package com.example.home.lavia;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import java.util.ArrayList;
-import java.util.jar.Attributes;
 
 public abstract class customAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    public ViewHolder onCreateViewHolder(ViewGroup parent,
-                                           int viewType) {
-        LayoutInflater layoutInflater =
-                LayoutInflater.from(parent.getContext());
-        ViewDataBinding binding = DataBindingUtil.inflate(
-                layoutInflater, viewType, parent, false);
-        return new ViewHolder(binding);
+    Context c;
+    ArrayList<liquor> data;
+
+    public customAdapter(Context c, ArrayList<liquor> data) {
+        this.c = c;
+        this.data = data;
     }
 
-    public void onBindViewHolder(ViewHolder holder,
-                                 int position) {
-        Object data = getObjForPosition(position);
-        holder.bind(data);
-    }
+    @NonNull
     @Override
-    public int getItemViewType(int position) {
-        return getLayoutIdForPosition(position);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.liq_list,parent,false);
+        return new ViewHolder(v);
     }
 
-    protected abstract Object getObjForPosition(int position);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.nameLiq.setText(data.get(position).getLiqName());
+        holder.priceLiq.setText(data.get(position).getLiqPrice());
 
-    protected abstract int getLayoutIdForPosition(int position);
-}
+        picassoClient.downloading(c,data.get(position).getimageUrl(),holder.imageLiq);
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }}

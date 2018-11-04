@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    String store;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +23,7 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        store = getIntent().getStringExtra("store");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -32,6 +34,7 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        Toast.makeText(this,store,Toast.LENGTH_LONG).show();
 
     }
 
@@ -76,6 +79,7 @@ public class Home extends AppCompatActivity
 
         if (id == R.id.leakage) {
             Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
+            camshot.putExtra("store",store);
             startActivity(camshot);
         }else if (id == R.id.whiskey) {
             Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
@@ -88,6 +92,7 @@ public class Home extends AppCompatActivity
             startActivity(camshot);
         }else if (id == R.id.brandy) {
             Intent camshot = new Intent(getApplicationContext(), Brandy.class);
+            camshot.putExtra("store",store);
             startActivity(camshot);
         }else if (id == R.id.rum) {
             Intent camshot = new Intent(getApplicationContext(), rumActivity.class);

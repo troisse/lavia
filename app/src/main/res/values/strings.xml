@@ -11,6 +11,7 @@
     <string name="auth_failed">Log in failed, check your email and password or sign up</string>
 
 
+    <string name="google_api">AIzaSyD2AaNDOWYL3-0FJeNmHuQp5Ma_c3zmLM0</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="title_activity_outlet"> Stores</string>

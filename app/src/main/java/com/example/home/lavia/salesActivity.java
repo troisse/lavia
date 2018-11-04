@@ -16,7 +16,7 @@ import android.view.MenuItem;
 
 public class salesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    int store;
+//    int store;
 
 
     private Toolbar toolbar;

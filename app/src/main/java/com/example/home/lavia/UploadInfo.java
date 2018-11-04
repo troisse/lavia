@@ -5,14 +5,12 @@ public class UploadInfo<data> {
     private String liqPrice;
     private String imageUrl;
     private String liqGroup;
-    private String selectedType;
 
-    public UploadInfo(String liqName, String liqPrice, String imageUrl, String liqGroup, String selectedType) {
+    public UploadInfo(String liqName, String liqPrice, String imageUrl, String liqGroup) {
         this.liqName = liqName;
         this.liqPrice = liqPrice;
         this.imageUrl = imageUrl;
         this.liqGroup = liqGroup;
-this.selectedType = selectedType;
 
     }
 
@@ -46,15 +44,9 @@ this.selectedType = selectedType;
     public String getLiqGroup() {
         return liqGroup;
     }
+
     public void setLiqGroup(String liqGroup){
         this.liqGroup = liqGroup;
     }
 
-    public String getSelectedType() {
-        return selectedType;
-    }
-
-    public void setSelectedType(String selectedType) {
-        this.selectedType = selectedType;
-    }
 }
