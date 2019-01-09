@@ -1,8 +1,14 @@
 package com.example.home.lavia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,38 +16,130 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class Home extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-    String store;
+public class Home extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    FirebaseAuth mAuth;
+    static FirebaseAuth.AuthStateListener AuthListener;
+    Intent camshot;
+    public final static String gani="store";
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String ebu;
+    TextView openMenu;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        store = getIntent().getStringExtra("store");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
+
+        Intent gwan= getIntent();
+        final String tip =gwan.getStringExtra(gani);
+
+        editor.putString(Home.gani,tip);
+        editor.apply();
+
+        ebu= pref.getString(gani, null);
+
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(getParent()));
+        if (getIntent().getBooleanExtra("crash", false)) {
+            Intent n = new Intent(Home.this, firstActivity.class);
+            startActivity(n);
+        }
+
+        openMenu=findViewById(R.id.menu);
+        openMenu.setOnClickListener(Home.this);
+        mAuth= FirebaseAuth.getInstance();
+
+        AuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+                if (firebaseUser == null) {
+                    // User is signed out
+                    Toast.makeText(Home.this,"Please Sign In or Sign Up",Toast.LENGTH_LONG).show();
+
+                    Intent i = new Intent(Home.this,firstActivity.class);
+                    startActivity(i);
+                }
+            }
+        };
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            @Override
+        public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
+        }
+        @Override
+        public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        Toast.makeText(this,store,Toast.LENGTH_LONG).show();
 
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v==openMenu){
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            if (!drawer.isDrawerVisible(GravityCompat.START)) {
+                drawer.openDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
+    }
+    public void checkConnection(){
+        if(!isOnline()){
+            Toast.makeText(Home.this, "Check Internet Connection", Toast.LENGTH_SHORT).show();
+            camshot= new Intent(getApplicationContext(),Home.class);
+            startActivity(camshot);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAuth.addAuthStateListener(AuthListener);
+    }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -64,7 +162,14 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.logOut) {
+
+            FirebaseAuth auth=FirebaseAuth.getInstance();
+            auth.signOut();
+
+            startActivity(new Intent(Home.this, firstActivity.class)); //Go back to home page
+            finish();
+
             return true;
         }
 
@@ -73,40 +178,45 @@ public class Home extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
-            camshot.putExtra("store",store);
+
+        if (id == R.id.whiskey) {
+            camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
+        } else if (id == R.id.vodka) {
+            camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
-            startActivity(camshot);
-        }else if (id == R.id.home) {
-            Intent camshot = new Intent(getApplicationContext(), Home.class);
-            startActivity(camshot);
-        }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
-            camshot.putExtra("store",store);
-            startActivity(camshot);
-        }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
+        } else if (id == R.id.home) {
+            camshot = new Intent(getApplicationContext(), Home.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
+            camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
+        } else if (id == R.id.brant) {
+            camshot = new Intent(getApplicationContext(), brantActivity.class);
+            startActivity(camshot);
+
+        } else if (id == R.id.beer) {
+            camshot = new Intent(getApplicationContext(), beerActivity.class);
+            startActivity(camshot);
+        } else if (id == R.id.gar) {
+            camshot = new Intent(getApplicationContext(), garActivity.class);
+            startActivity(camshot);
+        }else if (id == R.id.refreshments) {
+            camshot = new Intent(getApplicationContext(), refreshmentsActivity.class);
             startActivity(camshot);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        camshot.setAction(Intent.ACTION_VIEW);
+
+        checkConnection();
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

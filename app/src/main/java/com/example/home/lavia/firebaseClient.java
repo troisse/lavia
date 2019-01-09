@@ -1,9 +1,13 @@
 package com.example.home.lavia;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -18,75 +22,128 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class firebaseClient {
 
-//    ProgressBar progressBar;
-    Context c;
-//    DatabaseReference fire;
-    DatabaseReference db;
-    RecyclerView rv;
-    ArrayList<liquor> data=new ArrayList<>();
-    customAdapter adapter;
+    @SuppressLint("StaticFieldLeak")
+    private static Context c;
+    private static DatabaseReference db;
+    private RecyclerView rv;
+    static ArrayList<liquor> purchase= new ArrayList<>();
+    static ProgressDialog progressDialog;
 
-    public firebaseClient(Context c, DatabaseReference db, RecyclerView mRecyclerView) {
-        this.c = c;
-        this.db = db;
+    firebaseClient(Context c, DatabaseReference db, RecyclerView mRecyclerView) {
+        firebaseClient.c = c;
+        firebaseClient.db = db;
         this.rv = mRecyclerView;
 
         //INITIALIZE
         Firebase.setAndroidContext(c);
 
-//        fire =new Firebase(db_Url)
     }
 
-    private void fetchData(DataSnapshot dataSnapshot) {
-        data.clear();
 
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//            String  = dataSnapshot.child("Description").getValue(UploadInfo.class);
-//            Long quantity = dataSnapshot.child("Quantity").getValue(Long.class);
-//            data.add(description+" ("+quantity+")");
-//            myArrayAdapter.notifyDataSetChanged();
-//            liquor drink= new liquor();
-//            drink.setLiqName((ds.getValue(liquor.class)).getLiqName().toString());
-//            drink.setLiqPrice(data.toString());
-//            drink.setImageUrl((ds.getValue(liquor.class)).getImageUrl());
+    private void fetchData(DataSnapshot ds) {
+
+        purchase.clear();
+
+        for (DataSnapshot snap:ds.getChildren()) {
+            String liq=snap.getKey();
+            UploadInfo value = snap.getValue(UploadInfo.class);
+
+            assert value != null;
+
+//            String liqName = value.getLiqName();
+            String liqPrice = value.getLiqPrice();
+            String imageUrl = value.getImageUrl();
+
+        final liquor fire = new liquor();
+
+        fire.setliqName(liq);
+        fire.setliqPrice(liqPrice);
+        fire.setimageUrl(imageUrl);
+
+        purchase.add(fire);
+    }
+        if (purchase != null) {
+            customAdapter adapter = new customAdapter(c, purchase, new customAdapter.OnRecyclerViewItemClickedListener() {
+                @Override
+                public void OnItemClick(liquor item) {
+
+                    Intent i = new Intent(c.getApplicationContext(), detailActivity.class);
+
+                    String liqName = item.getliqName();
+                    String liqPrice = item.getliqPrice();
+                    String url = item.getimageUrl();
+
+                    i.putExtra(detailActivity.EXTRA_NAME,liqName);
+                    i.putExtra(detailActivity.EXTRA_PRICE,liqPrice);
+                    i.putExtra(detailActivity.EXTRA_URL,url);
+
+                    c.startActivity(i);
 
 
-//            drink.setLiqGroup(ds.getValue(liquor.class).toString());
-//            data.add(drink);
-//            for (liquor aData : data) {
-//                System.out.println(aData);
-
-            liquor drink = new liquor();
-            drink.setLiqName(ds.getValue(liquor.class).getLiqName());
-            drink.setLiqPrice(ds.getValue(liquor.class).getLiqPrice());
-            drink.setimageUrl(ds.getValue(liquor.class).getimageUrl());
-
-            data.add(drink);
-        }
-
-        if (data.size() > 0) {
-            adapter = new customAdapter(c, data) {
-            };
+                }
+                });
             rv.setAdapter(adapter);
-        } else {
-            Toast.makeText(c, "Try Again", LENGTH_SHORT).show();
+            } else {
+            checkConnection();
+            }
+    progressDialog.dismiss();
+    }
+
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public void checkConnection(){
+        if(!isOnline()){
+            Toast.makeText(c, "Check Internet Connection", Toast.LENGTH_SHORT).show();
+            }else {
+            Toast.makeText(c, "Service Unavailable", LENGTH_SHORT).show();
         }
     }
 
+    public static void remove(final String buyName) {
 
+        db.child(buyName).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().removeValue();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(c, databaseError.getMessage(), LENGTH_SHORT).show();
+                    }
+
+                });
+
+            }
+
+
+
+//UploadInfo niw= new UploadInfo();
     //READ BY HOOKING ONTO DATABASE OPERATION CALLBACKS
-    public void refreshData() {
-        db.addValueEventListener(new ValueEventListener() {
+ArrayList<liquor> refreshData(final ProgressDialog progressDialog) {
+        firebaseClient.progressDialog = progressDialog;
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println(dataSnapshot);
 
-                    fetchData(dataSnapshot);
-            }
+                fetchData(dataSnapshot);
+                }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(c,"Error",LENGTH_SHORT).show();
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(c, databaseError.getMessage(), LENGTH_SHORT).show();
             }
         });
-        }
+
+        return purchase;
+    }
+
 }

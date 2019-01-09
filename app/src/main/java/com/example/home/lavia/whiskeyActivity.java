@@ -1,9 +1,14 @@
 package com.example.home.lavia;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.view.View;
+import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,44 +17,110 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class whiskeyActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+    Intent camshot;
+    static DatabaseReference db;
+    ArrayList<liquor> data;
+    RecyclerView mRecyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    FirebaseAuth mAuth;
+    FirebaseAuth.AuthStateListener AuthListener ;
+    String store;
+    ProgressDialog progressDialog;
+    SharedPreferences pref;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whiskey);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openCart();
-            }
-        });
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
+        if (getIntent().getBooleanExtra("crash", false)) {
+            Intent n = new Intent(whiskeyActivity.this, firstActivity.class);
+            startActivity(n);
+        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mAuth= firstActivity.auth;
+        AuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+                if (firebaseUser == null) {
+                    // User is signed out
+                    Toast.makeText(whiskeyActivity.this,"Please Sign In or Sign Up",Toast.LENGTH_LONG).show();
+
+                    Intent i = new Intent(whiskeyActivity.this,firstActivity.class);
+                    startActivity(i);
+                }
+            }
+        };
+
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(whiskeyActivity.this);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        String ebu= pref.getString(Home.gani, null);
+
+        if (ebu == null){
+            Toast.makeText(whiskeyActivity.this,"Please Select Store",Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(whiskeyActivity.this,outletActivity.class);
+            startActivity(intent);
+        }else {
+            String store=ebu.trim();
+            db=FirebaseDatabase.getInstance().getReference("lavia/Nairobi/"+store+"/Liquor/Whiskey/");
+
+        }
+
+        progressDialog=ProgressDialog.show(this,"Chill","Loading");
+        firebaseClient helper = new firebaseClient(whiskeyActivity.this, db, mRecyclerView);
+        helper.refreshData(progressDialog);
+
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(whiskeyActivity.this);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
-    public void openCart() {
-        Intent intent = new Intent(this, cartActivity.class);
-        startActivity(intent);
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mAuth.addAuthStateListener(AuthListener);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            progressDialog.cancel();
         } else {
             super.onBackPressed();
         }
@@ -70,46 +141,55 @@ public class whiskeyActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.logOut) {
+
+            firstActivity.auth.signOut();
+
+            startActivity(new Intent(whiskeyActivity.this, firstActivity.class)); //Go back to home page
+            finish();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.leakage) {
-            Intent camshot = new Intent(getApplicationContext(), salesActivity.class);
+
+        if (id == R.id.whiskey) {
+            camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.whiskey) {
-            Intent camshot = new Intent(getApplicationContext(), whiskeyActivity.class);
+        } else if (id == R.id.vodka) {
+            camshot = new Intent(getApplicationContext(), vodkaActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.vodka) {
-            Intent camshot = new Intent(getApplicationContext(), vodkaActivity.class);
-            startActivity(camshot);
-        }else if (id == R.id.home) {
-            Intent camshot = new Intent(getApplicationContext(), Home.class);
-            startActivity(camshot);
-        }else if (id == R.id.brandy) {
-            Intent camshot = new Intent(getApplicationContext(), Brandy.class);
+        } else if (id == R.id.home) {
+            camshot = new Intent(getApplicationContext(), Home.class);
             startActivity(camshot);
         }else if (id == R.id.wine) {
-            Intent camshot = new Intent(getApplicationContext(), wineActivity.class);
+            camshot = new Intent(getApplicationContext(), wineActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.rum) {
-            Intent camshot = new Intent(getApplicationContext(), rumActivity.class);
+        } else if (id == R.id.brant) {
+            camshot = new Intent(getApplicationContext(), brantActivity.class);
             startActivity(camshot);
-        }else if (id == R.id.gin) {
-            Intent camshot = new Intent(getApplicationContext(), ginActivity.class);
+
+        } else if (id == R.id.beer) {
+            camshot = new Intent(getApplicationContext(), beerActivity.class);
+            startActivity(camshot);
+        } else if (id == R.id.gar) {
+            camshot = new Intent(getApplicationContext(), garActivity.class);
+            startActivity(camshot);
+        }else if (id == R.id.refreshments) {
+            camshot = new Intent(getApplicationContext(), refreshmentsActivity.class);
             startActivity(camshot);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        camshot.setAction(Intent.ACTION_VIEW);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

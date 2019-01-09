@@ -21,7 +21,7 @@ public class User {
         this.imagePrice = imagePrice;
     }
 
-    public String getUserId() {
+    public String getUserId(String id) {
         return UserId;
     }
 
@@ -33,10 +33,8 @@ public class User {
         return Username;
     }
 
-    public void setUsername(String username, String imageName, String imagePrice) {
+    public void setUsername(String username) {
         this.Username = username;
-        this.imageName = imageName;
-        this.imagePrice = imagePrice;
     }
 
     public String getContact() {
