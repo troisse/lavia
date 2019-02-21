@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/title_activity_home" />
+        <item
+            android:id="@+id/brant"
+            android:title="@string/title_activity_brant" />
+        <item
+            android:id="@+id/gar"
+            android:title="@string/title_activity_gar" />
+        <item
+            android:id="@+id/beer"
+            android:title="@string/title_activity_beer" />
+        <item
+            android:id="@+id/vodka"
+            android:title="@string/title_activity_vodka" />
+        <item
+            android:id="@+id/whiskey"
+            android:title="@string/title_activity_whiskey" />
+        <item
+            android:id="@+id/wine"
+            android:title="@string/title_activity_wine" />
+
+        <item
+            android:id="@+id/refreshments"
+            android:title="@string/title_activity_refreshments" />
+    </group>
+</menu>

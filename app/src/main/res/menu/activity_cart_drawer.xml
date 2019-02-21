@@ -3,34 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/leakage"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Add Products" />
-        <item
             android:id="@+id/home"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
+            android:title="@string/title_activity_home" />
         <item
-            android:id="@+id/brandy"
-            android:title="Brandy" />
+            android:id="@+id/brant"
+            android:title="@string/title_activity_brant" />
         <item
-            android:id="@+id/gin"
-            android:title="Gin" />
+            android:id="@+id/gar"
+            android:title="@string/title_activity_gar" />
         <item
-            android:id="@+id/rum"
-            android:title="Rum" />
+            android:id="@+id/beer"
+            android:title="@string/title_activity_beer" />
         <item
             android:id="@+id/vodka"
-            android:title="Vodka" />
+            android:title="@string/title_activity_vodka" />
         <item
             android:id="@+id/whiskey"
-            android:title="Whiskey" />
+            android:title="@string/title_activity_whiskey" />
         <item
             android:id="@+id/wine"
-            android:title="Wine" />
-    </group>
+            android:title="@string/title_activity_wine" />
 
+        <item
+            android:id="@+id/refreshments"
+            android:title="@string/title_activity_refreshments" />
+    </group>
 </menu>
